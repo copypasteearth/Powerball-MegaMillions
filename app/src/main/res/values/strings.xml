@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Powerball-MegaMillions</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Lottery Tools</string>
+    <string name="nav_header_subtitle">Powerball, Megamillions, and Simulation</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="my_tickets">My Tickets</string>
+    <string name="past">Past Results</string>
+    <string name="powerball">Powerball</string>
+    <string name="add_ticket">Add Ticket</string>
+    <string name="megamillions">Mega Millions</string>
+    <string name="none">None</string>
+    <string name="multiplier">Multiplier</string>
+    <string name="remove">Remove</string>
+    <string name="nowin">No win this drawing</string>
+    <string name="alertticket">You cannot have duplicate numbers in your ticket, try again?</string>
+    <string name="numbers">Fetching Latest Numbers</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

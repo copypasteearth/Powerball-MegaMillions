@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+<RelativeLayout
+    android:layout_width="0dip"
+    android:layout_height="wrap_content"
+    android:layout_weight="0.16666">
+   <NumberPicker
+       android:id="@+id/one"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:solidColor="@color/cream">
+   </NumberPicker>
+</RelativeLayout>
+    <RelativeLayout
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.16666">
+    <NumberPicker
+        android:id="@+id/two"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:solidColor="@color/cream">
+    </NumberPicker>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.16666">
+    <NumberPicker
+        android:id="@+id/three"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:solidColor="@color/cream">
+    </NumberPicker>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.16666">
+    <NumberPicker
+        android:id="@+id/four"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:solidColor="@color/cream">
+    </NumberPicker>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.16666">
+    <NumberPicker
+        android:id="@+id/five"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:solidColor="@color/cream">
+    </NumberPicker>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.16666">
+    <NumberPicker
+        android:id="@+id/six"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:solidColor="@color/red">
+    </NumberPicker>
+    </RelativeLayout>
+</LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/multiplier"/>
+    <RadioGroup
+        android:id="@+id/group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <RadioButton
+            android:id="@+id/none"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/none"
+            android:checked="true"/>
+        <RadioButton
+            android:id="@+id/yes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Yes"/>
+
+    </RadioGroup>
+</LinearLayout>
