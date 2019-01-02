@@ -1,3 +1,9 @@
+/*
+ * Author: John Rowan
+ * Description: This is a helper class to set and cancel alarms.
+ * Anyone may use this file or anything contained in this project for their own personal use.
+ */
+
 package powerball.apps.jacs.powerball;
 
 import android.app.AlarmManager;
@@ -10,6 +16,12 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class AlarmSettingManager {
+   /**
+     *
+     * @param context
+     * Description: sets an alarm to go off at 11:15pm every tuesday
+     *            which triggers the broadcast reciever and starts a service
+     */
     public static void setTuesdayMegaMillionsAlarm(Context context) {
         Intent alarm = new Intent("powerball.apps.jacs.powerball.START_ALARM");
         alarm.putExtra("requestCode", Constants.TUESDAY_ALARM);
@@ -37,6 +49,11 @@ public class AlarmSettingManager {
 
         }
     }
+   /**
+     *
+     * @param context
+     * Description: cancels the tuesday alarm
+     */
     public static void cancelTuesdayMegaMillionsAlarm(Context context){
         Intent alarm = new Intent("powerball.apps.jacs.powerball.START_ALARM");
         alarm.setClass(context,AlarmReceiver.class);
@@ -44,6 +61,12 @@ public class AlarmSettingManager {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
     }
+  /**
+     *
+     * @param context
+     *  Description: sets an alarm to go off at 11:15pm every wednesday
+     *           which triggers the broadcast reciever and starts a service
+     */
     public static void setWednesdayPowerballAlarm(Context context){
         Intent alarm = new Intent("powerball.apps.jacs.powerball.START_ALARM");
         alarm.putExtra("requestCode", Constants.WEDNESDAY_ALARM);
@@ -71,6 +94,11 @@ public class AlarmSettingManager {
 
         }
     }
+   /**
+     *
+     * @param context
+     *  Description: cancels wednesdays powerball alarm
+     */
     public static void cancelWednesdayPowerballAlarm(Context context){
         Intent alarm = new Intent("powerball.apps.jacs.powerball.START_ALARM");
         alarm.setClass(context,AlarmReceiver.class);
@@ -78,6 +106,12 @@ public class AlarmSettingManager {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
     }
+   /**
+     *
+     * @param context
+     * Description: sets an alarm to go off at 11:15pm every friday
+     *            which triggers the broadcast reciever and starts a service
+     */
     public static void setFridayMegaMillionsAlarm(Context context){
         Intent alarm = new Intent("powerball.apps.jacs.powerball.START_ALARM");
         alarm.putExtra("requestCode", Constants.FRIDAY_ALARM);
@@ -106,6 +140,11 @@ public class AlarmSettingManager {
 
         }
     }
+   /**
+     *
+     * @param context
+     * Description: cancels the friday alarm
+     */
     public static void cancelFridayMegaMillionsAlarm(Context context){
         Intent alarm = new Intent("powerball.apps.jacs.powerball.START_ALARM");
         alarm.setClass(context,AlarmReceiver.class);
@@ -113,6 +152,12 @@ public class AlarmSettingManager {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
     }
+   /**
+     *
+     * @param context
+     * Description: sets an alarm to go off at 11:15pm every saturday
+     *           which triggers the broadcast reciever and starts a service
+     */
     public static void setSaturdayPowerballAlarm(Context context){
         Intent alarm = new Intent("powerball.apps.jacs.powerball.START_ALARM");
         alarm.putExtra("requestCode", Constants.SATURDAY_ALARM);
@@ -141,6 +186,11 @@ public class AlarmSettingManager {
 
         }
     }
+    /**
+     *
+     * @param context
+     *  Description: cancels saturdays powerball alarm
+     */
     public static void cancelSaturdayPowerballAlarm(Context context){
         Intent alarm = new Intent("powerball.apps.jacs.powerball.START_ALARM");
         alarm.setClass(context,AlarmReceiver.class);

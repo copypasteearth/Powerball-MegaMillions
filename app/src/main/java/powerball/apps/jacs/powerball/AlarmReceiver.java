@@ -1,3 +1,9 @@
+/*
+ * Author: John Rowan
+ * Description: This class is a Broadcast Reciever for catching alarms.
+ * Anyone may use this file or anything contained in this project for their own personal use.
+ */
+
 package powerball.apps.jacs.powerball;
 
 import android.app.*;
@@ -6,6 +12,11 @@ import android.os.*;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+/**
+ * When the alarms that were set fire it will trigger this and start the required service.
+ * This checks if the sdk is greater than or equal to oreo and starts the service in foreground
+ * as new specifications requires, otherwise it starts service the old way.
+ */
 public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
