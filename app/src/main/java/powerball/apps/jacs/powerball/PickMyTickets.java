@@ -1,3 +1,10 @@
+/*
+ * Author: John Rowan
+ * Description: main fragment with viewpager that holds a powerball and a mega millions fragment which are
+ * used for picking the users tickets and saving them
+ * Anyone may use this file or anything contained in this project for their own personal use.
+ */
+
 package powerball.apps.jacs.powerball;
 
 import android.content.Context;

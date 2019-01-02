@@ -1,3 +1,11 @@
+/*
+ * Author: John Rowan
+ * Description: this fragment is open from the past results navigation menu option and it fetches
+ * the winning numbers starting at the current day and going into the past. it compares all of the users
+ * picked numbers with the winning numbers and displays the results.
+ * Anyone may use this file or anything contained in this project for their own personal use.
+ */
+
 package powerball.apps.jacs.powerball;
 
 import android.content.Context;
@@ -201,51 +209,7 @@ public class MegaMillionsFragment extends Fragment {
                     }
                 }
         );
-      /*  StringRequest jsonArrayRequest = new StringRequest(url, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                try {
-                    if (response.length() > 0) {
-                        Log.d("timer","response"+response.toString());
-                        tickets.clear();
-                        for (int i = 0; i < response.length(); i++) {
-                            JSONObject jsonObject = response.getJSONObject(i);
-                            WinningTicket person = new WinningTicket();
-                            if (!jsonObject.isNull("field_draw_date")) {
-                                person.date = jsonObject.getString("field_draw_date");
-                            }
-                            if (!jsonObject.isNull("field_winning_numbers")) {
-                                person.winningNumber = jsonObject.getString("field_winning_numbers");
-                            }
-                            if (!jsonObject.isNull("field_multiplier")) {
-                                person.multiplier = jsonObject.getString("field_multiplier");
-                            }
-                            //if(!first){
-                            //    WinningTicket tick = SharedPrefHelper.getSharedOBJECT(getApplicationContext(),"ticket");
-                            //    if(tick == null || !tick.equals(person)){
-                            //        SharedPrefHelper.setSharedOBJECT(getApplicationContext(),"ticket",person);
-                            //    }
-                            //    first = true;
-                            //}
-                            tickets.add(counter, person);
-                            rvAdapter.notifyItemInserted(counter);
-                            counter++;
-                        }
-                        // rvAdapter.notifyDataSetChanged();
 
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                // do something
-                Log.d("timer","error : "+error.getLocalizedMessage() + error.networkResponse.statusCode);
-            }
-        });
-        */
 
         requestQueue.add(stringRequest);
 
@@ -267,7 +231,8 @@ public class MegaMillionsFragment extends Fragment {
                             @Override
                             public void onResponse(String response) {
                                 try {
-                                    //TODO remove the loading null element from list and notify the adapter
+                                    tickets.remove(tickets.size() - 1);
+                                    rvAdapter.notifyItemRemoved(tickets.size());
                                     XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
                                     factory.setNamespaceAware(true);
                                     XmlPullParser parser = factory.newPullParser();

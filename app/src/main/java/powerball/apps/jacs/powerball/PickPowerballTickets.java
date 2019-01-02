@@ -1,3 +1,9 @@
+/*
+ * Author: John Rowan
+ * Description: fragment for picking powerball tickets and saving them to your device
+ * Anyone may use this file or anything contained in this project for their own personal use.
+ */
+
 package powerball.apps.jacs.powerball;
 
 import android.content.Context;

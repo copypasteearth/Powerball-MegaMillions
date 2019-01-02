@@ -1,3 +1,9 @@
+/*
+ * Author: John Rowan
+ * Description: A constants class for any type of constants that the program requires
+ * Anyone may use this file or anything contained in this project for their own personal use.
+ */
+
 package powerball.apps.jacs.powerball;
 
 public class Constants {

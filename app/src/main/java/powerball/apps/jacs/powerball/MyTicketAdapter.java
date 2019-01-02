@@ -1,3 +1,9 @@
+/*
+ * Author: John Rowan
+ * Description: Adapter for the recyclerview used to pick the users tickets
+ * Anyone may use this file or anything contained in this project for their own personal use.
+ */
+
 package powerball.apps.jacs.powerball;
 
 import android.content.Context;

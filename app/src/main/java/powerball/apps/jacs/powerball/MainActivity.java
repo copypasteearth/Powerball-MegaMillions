@@ -1,3 +1,9 @@
+/*
+ * Author: John Rowan
+ * Description: Main Activity the main entry point to the application
+ * Anyone may use this file or anything contained in this project for their own personal use.
+ */
+
 package powerball.apps.jacs.powerball;
 
 import android.app.AlarmManager;

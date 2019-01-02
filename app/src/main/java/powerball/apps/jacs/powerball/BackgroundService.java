@@ -1,3 +1,10 @@
+/*
+ * Author: John Rowan
+ * Description: This is a service to check for the latest powerball numbers and send a notification
+ * if the user has won or has not won
+ * Anyone may use this file or anything contained in this project for their own personal use.
+ */
+
 package powerball.apps.jacs.powerball;
 
 import android.app.*;
@@ -34,8 +41,7 @@ import java.util.TimerTask;
 
 public class BackgroundService extends Service {
 
-    public static final int notify = 5 * 60 * 1000;  //interval between two services(Here Service run every 5 seconds)
-    int count = 0;  //number of times service is display
+    public static final int notify = 5 * 60 * 1000;  //interval between two services(Here Service run every 5 minutes)
     private Handler mHandler = new Handler();   //run on another Thread to avoid crash
     private Timer mTimer = null;
     public  RequestQueue requestQueue;
@@ -63,6 +69,15 @@ public class BackgroundService extends Service {
         mTimer.cancel();
     }
 
+    /**
+     *
+     * @param intent
+     * @param flags
+     * @param startId
+     * @return START_STICKY
+     * Description: this method makes a notification and displays the notification
+     * as well as calls startForeground as required by oreo and up
+     */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Intent notificationIntent = new Intent(this, MainActivity.class);
@@ -90,6 +105,8 @@ public class BackgroundService extends Service {
         startForeground(Constants.POWER_FOREGROUND,notification);
         return START_STICKY;
     }
+
+
     class TimeDisplay extends TimerTask {
         public Context context;
         public TimeDisplay(Context context){
@@ -103,7 +120,11 @@ public class BackgroundService extends Service {
                 public void run() {
 
                     String url = "https://www.powerball.com/api/v1/numbers/powerball/recent10?_format=json";
-
+                    /**
+                     * Description: this jsonArrayRequest requests the powerball numbers from the url above and
+                     * gets the latest number and if it is either the day before or that present day then it will do
+                     * the calculation based on your saved tickets and notify the user if their tickets are winners or not
+                     */
                     JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
                         @Override
                         public void onResponse(JSONArray response) {
@@ -222,16 +243,6 @@ public class BackgroundService extends Service {
                                                        .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
                                                        .setCustomContentView(notificationLayout)
                                                        .setCustomBigContentView(notificationLayoutExpanded)
-                                                       //.setSmallIcon(R.drawable.ic_launcher_background)
-                                                       //.setContentTitle("my Powerball")
-                                                       //.setContentText("ticket1: " + person.ticket1 + " := " + person.calculateWin(person.ticket1) + "\n"
-                                                       // + "ticket2: " + person.ticket2 + " := " + person.calculateWin(person.ticket2) + "\n"
-                                                       // + "ticket3: " + person.ticket3 + " := " + person.calculateWin(person.ticket3) + "\n")
-                                                       //.setStyle(new NotificationCompat.BigTextStyle()
-                                                       //.bigText("ticket1: " + person.ticket1 + " := " + person.calculateWin(person.ticket1) + "\n"
-                                                       //        + "ticket2: " + person.ticket2 + " := " + person.calculateWin(person.ticket2) + "\n"
-                                                       //       + "ticket3: " + person.ticket3 + " := " + person.calculateWin(person.ticket3) + "\n"))
-                                                       // .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                                                        .setContentIntent(pendingIntent)
                                                        .setAutoCancel(true);
                                            }else{
@@ -239,19 +250,8 @@ public class BackgroundService extends Service {
 
                                                        .setSmallIcon(R.drawable.ic_stat_name)
                                                        .setContentTitle("Powerball/Megamillions")
-                                                       //.setStyle(new NotificationCompat.DecoratedCustomViewStyle())
                                                        .setCustomContentView(notificationLayout)
                                                        .setCustomBigContentView(notificationLayoutExpanded)
-                                                       //.setSmallIcon(R.drawable.ic_launcher_background)
-                                                       //.setContentTitle("my Powerball")
-                                                       //.setContentText("ticket1: " + person.ticket1 + " := " + person.calculateWin(person.ticket1) + "\n"
-                                                       // + "ticket2: " + person.ticket2 + " := " + person.calculateWin(person.ticket2) + "\n"
-                                                       // + "ticket3: " + person.ticket3 + " := " + person.calculateWin(person.ticket3) + "\n")
-                                                       //.setStyle(new NotificationCompat.BigTextStyle()
-                                                       //.bigText("ticket1: " + person.ticket1 + " := " + person.calculateWin(person.ticket1) + "\n"
-                                                       //        + "ticket2: " + person.ticket2 + " := " + person.calculateWin(person.ticket2) + "\n"
-                                                       //       + "ticket3: " + person.ticket3 + " := " + person.calculateWin(person.ticket3) + "\n"))
-                                                       // .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                                                        .setContentIntent(pendingIntent)
                                                        .setAutoCancel(true);
                                            }
@@ -271,7 +271,7 @@ public class BackgroundService extends Service {
                                             }
                                             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
 
-// notificationId is a unique int for each notification that you must define
+                                            // notificationId is a unique int for each notification that you must define
                                             notificationManager.notify(new Random().nextInt(), mBuilder.build());
                                             stopSelf();
                                             break;
@@ -279,7 +279,6 @@ public class BackgroundService extends Service {
                                             break;
                                         }
                                     }
-                                    //rvAdapter.notifyDataSetChanged();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();

@@ -1,3 +1,10 @@
+/*
+ * Author: John Rowan
+ * Description: Adapter for recyclerviews from PowerballFragment and MegaMillionsFragment it does comparason
+ * of users tickets with winning tickets and adds results to a view.
+ * Anyone may use this file or anything contained in this project for their own personal use.
+ */
+
 package powerball.apps.jacs.powerball;
 
 import android.content.Context;

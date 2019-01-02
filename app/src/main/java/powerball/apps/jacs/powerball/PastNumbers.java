@@ -1,3 +1,10 @@
+/*
+ * Author: John Rowan
+ * Description: this is a fragment with a viewpager that has a fragment for each the powerball and the megamillions
+ * that both deal with the past results of each lottery
+ * Anyone may use this file or anything contained in this project for their own personal use.
+ */
+
 package powerball.apps.jacs.powerball;
 
 import android.content.Context;

@@ -1,3 +1,10 @@
+/*
+ * Author: John Rowan
+ * Description: background service to get latest mega millions winning numbers and compare them with
+ * the users tickets and send a notification with the results.
+ * Anyone may use this file or anything contained in this project for their own personal use.
+ */
+
 package powerball.apps.jacs.powerball;
 
 import android.app.Notification;
@@ -42,7 +49,6 @@ import java.util.TimerTask;
 
 public class MegaBackgroundService extends Service {
     public static final int notify = 5 * 60 * 1000;  //interval between two services(Here Service run every 5 minutes)
-    int count = 0;  //number of times service is display
     private Handler mHandler = new Handler();   //run on another Thread to avoid crash
     private Timer mTimer = null;
     public RequestQueue requestQueue;
@@ -70,6 +76,14 @@ public class MegaBackgroundService extends Service {
         mTimer.cancel();
     }
 
+    /**
+     *
+     * @param intent
+     * @param flags
+     * @param startId
+     * @return START_STICKY
+     * Description: makes a notification and calls startForeground as required from oreo and up
+     */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Intent notificationIntent = new Intent(this, MainActivity.class);
@@ -110,7 +124,11 @@ public class MegaBackgroundService extends Service {
                 public void run() {
 
                     String url = "https://www.powerball.com/api/v1/numbers/powerball/recent10?_format=json";
-
+                    /**
+                     * Description: jsonArrayRequest which is really a string request and it gets the latest
+                     * mega millions numbers in xml format and then it compares if the number is the current day or
+                     * the day before then checks if any of the users numbers are winners and sends notification.
+                     */
                     StringRequest jsonArrayRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {

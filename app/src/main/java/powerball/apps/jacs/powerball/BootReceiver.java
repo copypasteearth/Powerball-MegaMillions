@@ -1,3 +1,9 @@
+/*
+ * Author: John Rowan
+ * Description: when the users device boots up or reboots this schedules the alarms again
+ * Anyone may use this file or anything contained in this project for their own personal use.
+ */
+
 package powerball.apps.jacs.powerball;
 
 import android.app.AlarmManager;

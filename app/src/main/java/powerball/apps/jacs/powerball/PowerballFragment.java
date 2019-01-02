@@ -1,3 +1,10 @@
+/*
+ * Author: John Rowan
+ * Description: fragment for retrieving past results for the powerball and displaying them along with the results
+ * of the users tickets.
+ * Anyone may use this file or anything contained in this project for their own personal use.
+ */
+
 package powerball.apps.jacs.powerball;
 
 import android.content.Context;
