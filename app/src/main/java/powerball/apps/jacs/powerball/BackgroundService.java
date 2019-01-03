@@ -144,7 +144,7 @@ public class BackgroundService extends Service {
                                             person.multiplier = jsonObject.getString("field_multiplier");
                                         }
                                         //tickets.add(i, person);
-                                        WinningTicket prev = SharedPrefHelper.getSharedOBJECT(context,"ticket");
+                                       // WinningTicket prev = SharedPrefHelper.getSharedOBJECT(context,"ticket");
                                         SimpleDateFormat jsonFormat = new SimpleDateFormat("yyyy-MM-dd");
                                         Calendar theDay = Calendar.getInstance();
                                         Calendar yest = Calendar.getInstance();
@@ -163,7 +163,7 @@ public class BackgroundService extends Service {
                                                         && yest.get(Calendar.DAY_OF_YEAR) == theDay.get(Calendar.DAY_OF_YEAR))) {
                                             //Log.d("timer","date is yesterday or today" + theDay.toString());
 
-                                            SharedPrefHelper.setSharedOBJECT(context,"ticket",person);
+                                            //SharedPrefHelper.setSharedOBJECT(context,"ticket",person);
                                             Intent intent = new Intent(context, MainActivity.class);
                                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);

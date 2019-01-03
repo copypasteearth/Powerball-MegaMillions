@@ -1,3 +1,9 @@
+/*
+ * Author: John Rowan
+ * Description: Helper class for shared preferences
+ * Anyone may use this file or anything contained in this project for their own personal use.
+ */
+
 package powerball.apps.jacs.powerball;
 
 import android.content.Context;
@@ -12,10 +18,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SharedPrefHelper {
-
-
-    //save data in sharedPrefences
-
+    /**
+     *
+     * @param context
+     * @param key
+     * @return an array list of MyTicket class
+     * Description: gets an arraylist of MyTicket from shared preferences based
+     * on the String key parameter which is either powerball or megamillions
+     */
     public static ArrayList<MyTicket> getMyTickets(Context context,String key){
         Type listOfObjects = new TypeToken<List<MyTicket>>(){}.getType();
         SharedPreferences myPrefs = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
@@ -26,6 +36,15 @@ public class SharedPrefHelper {
         else
             return new ArrayList<MyTicket>();
     }
+
+    /**
+     *
+     * @param context
+     * @param tickets
+     * @param key
+     * Desctiption: stores an arraylist of MyTickets objects in shared preferences based on
+     * String key which is either powerball or megamillions
+     */
     public static void setMyTickets(Context context,List<MyTicket> tickets,String key){
         Gson gson = new Gson();
         Type listOfObjects = new TypeToken<List<MyTicket>>(){}.getType();
@@ -35,45 +54,24 @@ public class SharedPrefHelper {
         prefsEditor.putString(key, strObject);
         prefsEditor.commit();
     }
-    public static void setSharedOBJECT(Context context, String key, Object value) {
 
-        SharedPreferences sharedPreferences =  context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
-
-        SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
-
-        Gson gson = new Gson();
-
-        String json = gson.toJson(value);
-
-        prefsEditor.putString(key, json);
-
-        prefsEditor.apply();
-    }
-    public static WinningTicket getSharedOBJECT(Context context, String key) {
-
-        SharedPreferences sharedPreferences
-                =context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
-
-
-        Gson gson = new Gson();
-
-        String json = sharedPreferences.getString(key, "");
-        Log.d("json",json);
-        if(json.equals(""))
-            return null;
-
-        //Object obj = gson.fromJson(json, Object.class);
-
-        //WinningTicket objData = new Gson().fromJson(obj.toString(), WinningTicket.class);
-        WinningTicket objData = gson.fromJson(json, WinningTicket.class);
-
-        return objData;
-
-    }
+    /**
+     *
+     * @param context
+     * @return boolean
+     * Description: returns true if setting are set to schedule powerball alarms, false otherwise
+     */
     public static boolean shouldPowerballAlarmsBeSet(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
         return sharedPreferences.getBoolean("PowerballAlarm",true);
     }
+
+    /**
+     *
+     * @param context
+     * @return boolean
+     * Description: returns true if setting are set to schedule megamillions alarms, false otherwise
+     */
     public static boolean shouldMegaMillionsAlarmsBeSet(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
         return sharedPreferences.getBoolean("MegaMillionsAlarm",true);
