@@ -163,6 +163,17 @@ public class MainActivity extends AppCompatActivity
                     .replace(R.id.content_frame, fragment)
                     .commit();
 
+        }else if(id == R.id.Simulator){
+            SimulatorFragment fragment = SimulatorFragment.newInstance();
+            Bundle args = new Bundle();
+
+            fragment.setArguments(args);
+
+            // Insert the fragment by replacing any existing fragment
+            android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_frame, fragment)
+                    .commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
