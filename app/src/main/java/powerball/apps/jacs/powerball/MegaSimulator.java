@@ -33,7 +33,7 @@ public class MegaSimulator extends Fragment {
      * @return A new instance of fragment MegaSimulator.
      */
 
-    public static MegaSimulator newInstance(String param1, String param2) {
+    public static MegaSimulator newInstance() {
         MegaSimulator fragment = new MegaSimulator();
         return fragment;
     }
