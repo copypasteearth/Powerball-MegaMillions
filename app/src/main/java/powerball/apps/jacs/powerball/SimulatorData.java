@@ -41,11 +41,11 @@ public class SimulatorData {
     public SimulatorData(){
 
     }
-    public String getDays(long num){
+    public String getDays(long num,String yearString,String weekString){
         long remainderPlays = num % 104;
         long years = num/104;
         long weeks = remainderPlays/2;
-        return "Years: " + years + ", Weeks: " + weeks;
+        return yearString + ": " + years + ", " + weekString + ": " + weeks;
     }
 
 }

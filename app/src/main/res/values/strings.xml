@@ -18,6 +18,12 @@
     <string name="alertticket">You cannot have duplicate numbers in your ticket, try again?</string>
     <string name="numbers">Fetching Latest Numbers</string>
     <string name="simulator">Simulator</string>
+    <string name="years">Years</string>
+    <string name="weeks">Weeks</string>
+    <string name="hits">Hits</string>
+    <string name="average">Average</string>
+    <string name="minimum">Minimum</string>
+    <string name="totalplays">Total Plays</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
