@@ -123,7 +123,7 @@ public class MegaBackgroundService extends Service {
                 @Override
                 public void run() {
 
-                    String url = "https://www.powerball.com/api/v1/numbers/powerball/recent10?_format=json";
+                    String url = "https://www.megamillions.com/cmspages/utilservice.asmx/GetDrawingPagingData?pageNumber=1&pageSize=1&startDate=&endDate=";
                     /**
                      * Description: jsonArrayRequest which is really a string request and it gets the latest
                      * mega millions numbers in xml format and then it compares if the number is the current day or
@@ -180,7 +180,6 @@ public class MegaBackgroundService extends Service {
                                                         person.multiplier = jsonObject.getString("Megaplier");
                                                     }
                                                     person.winningNumber = ball1m + "," + ball2m + "," + ball3m + ","+ball4m+","+ball5m+","+ball6m;
-                                                    //TODO fix this date format after you see if it crashes or not
                                                     SimpleDateFormat jsonFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
                                                     Calendar theDay = Calendar.getInstance();
                                                     Calendar yest = Calendar.getInstance();

@@ -67,10 +67,16 @@ public class SharedPrefHelper {
         SharedPreferences myPrefs = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
         String json = myPrefs.getString(key, "");
         Gson gson = new Gson();
-        if(!json.equals(""))
+        if(!json.equals("") && json != null && !json.equals("null")){
+            Log.d("gson", "the string is not empty : " + json);
             return gson.fromJson(json, listOfObjects);
-        else
+        }
+
+        else{
+            Log.d("gson", "the string is empty");
             return new ArrayList<SimulatorData>();
+        }
+
     }
 
     /**

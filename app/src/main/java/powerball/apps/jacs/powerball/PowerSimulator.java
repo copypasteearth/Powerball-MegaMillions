@@ -11,11 +11,13 @@ import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,29 +33,16 @@ import java.util.ArrayList;
  * Use the {@link PowerSimulator#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PowerSimulator extends Fragment {
+public class PowerSimulator extends Fragment{
 public Button start,reset;
 public LinearLayout linear;
 public Context mContext;
 public PowerballSimulatorListener listener;
-public ArrayList<SimulatorData> data;
+public ArrayList<SimulatorData> data = new ArrayList<>();
 public PowerballSimulatorService mPlayService;
 public ArrayList<View> viewList = new ArrayList<>();
-    private final ServiceConnection mPlayServiceConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName className, IBinder service) {
-            PowerballSimulatorService.PowerballSimulatiorServiceBinder binder = (PowerballSimulatorService.PowerballSimulatiorServiceBinder) service;
-            mPlayService = binder.getService();
-            mPlayService.setPowerballSimulatorListener(listener);
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName className) {
-
-        }
-
-    };
+public boolean binding = false;
+    private ServiceConnection mPlayServiceConnection;
 
     public PowerSimulator() {
         // Required empty public constructor
@@ -78,6 +67,28 @@ public ArrayList<View> viewList = new ArrayList<>();
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        if(mPlayService != null)
+        mPlayService.setPowerballSimulatorListener(null);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(mPlayService != null)
+        mPlayService.setPowerballSimulatorListener(listener);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+       if(binding)
+        mContext.unbindService(mPlayServiceConnection);
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -95,6 +106,7 @@ public ArrayList<View> viewList = new ArrayList<>();
         super.onActivityCreated(savedInstanceState);
         ArrayList<MyTicket> tickets = SharedPrefHelper.getMyTickets(mContext,Constants.POWER_TICKETS);
         data = SharedPrefHelper.getSimData(mContext,Constants.POWER_SIM);
+       Log.d("powerservice","fragment size: " + data);
         long powerSimCounter = SharedPrefHelper.getLongPowerballCounter(mContext);
         if(tickets.size() > 0){
             boolean update = false;
@@ -116,7 +128,7 @@ public ArrayList<View> viewList = new ArrayList<>();
                 for(int j = 0;j < data.size();j++){
                     if(tickets.get(i).ticket.equals(data.get(j).number)){
                         contained = true;
-                        update = true;
+
                     }
                 }
                 if(!contained){
@@ -124,9 +136,11 @@ public ArrayList<View> viewList = new ArrayList<>();
                     simDat.number = tickets.get(i).ticket;
                     simDat.ofsetPlays = powerSimCounter;
                     data.add(simDat);
+                    update = true;
                 }
 
             }
+
             if(update){
                 SharedPrefHelper.setSimData(mContext,data,Constants.POWER_SIM);
                 if(PowerballSimulatorService.running)
@@ -180,13 +194,57 @@ public ArrayList<View> viewList = new ArrayList<>();
            listener = new PowerballSimulatorListener() {
                @Override
                public void onLottoResult(ArrayList<SimulatorData> listData) {
-                    for(int i = 0;i < listData.size();i++){
-                        SimulatorData singleData = listData.get(i);
-                        View view = viewList.get(i);
-                        //TODO populate all of the views with the simulator data
-                    }
+                   Log.d("powerservice","onlottoresult" + listData.size());
+                   for(int i = 0;i < listData.size();i++){
+                       SimulatorData singleData = listData.get(i);
+                       View view = viewList.get(i);
+                       TextView totalPlays = (TextView)view.findViewById(R.id.totalplays);
+                       totalPlays.setText(getString(R.string.totalplays) + ": " + singleData.plays);
+                       Log.d("powerservice","in listener");
+                       //TODO populate all of the views with the simulator data
+                   }
                }
            };
+            mPlayServiceConnection = new ServiceConnection() {
+
+                @Override
+                public void onServiceConnected(ComponentName className, IBinder service) {
+                    PowerballSimulatorService.PowerballSimulatiorServiceBinder binder = (PowerballSimulatorService.PowerballSimulatiorServiceBinder) service;
+                    mPlayService = binder.getService();
+                    mPlayService.setPowerballSimulatorListener(listener);
+                   // mPlayService.setMainActivity(getActivity());
+                    Log.d("powerservice","service binded");
+                }
+
+                @Override
+                public void onServiceDisconnected(ComponentName className) {
+                    Log.d("powerservice","service unbinded");
+                }
+
+            };
+            start.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(PowerballSimulatorService.running){
+                        Intent intent = new Intent(mContext,PowerballSimulatorService.class);
+                        mContext.unbindService(mPlayServiceConnection);
+                        binding = false;
+                        mContext.stopService(intent);
+                        start.setText(R.string.start);
+                    }else{
+                        Intent intent = new Intent(mContext,PowerballSimulatorService.class);
+                        mContext.startService(intent);
+                        mContext.bindService(intent,mPlayServiceConnection,Context.BIND_AUTO_CREATE);
+                        binding = true;
+                        start.setText(R.string.stop);
+                    }
+                }
+            });
+            if(PowerballSimulatorService.running){
+                Intent intent = new Intent(mContext,PowerballSimulatorService.class);
+                mContext.bindService(intent,mPlayServiceConnection,Context.BIND_AUTO_CREATE);
+                binding = true;
+            }
         }else{
             start.setEnabled(false);
             reset.setEnabled(false);
@@ -230,6 +288,7 @@ public ArrayList<View> viewList = new ArrayList<>();
                 }
 
             }
+
             if(update){
                 SharedPrefHelper.setSimData(mContext,data,Constants.POWER_SIM);
                 if(PowerballSimulatorService.running)
@@ -244,4 +303,6 @@ public ArrayList<View> viewList = new ArrayList<>();
         super.onAttach(context);
         mContext = context;
     }
+
+
 }
