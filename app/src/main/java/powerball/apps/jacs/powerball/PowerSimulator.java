@@ -7,11 +7,23 @@
 package powerball.apps.jacs.powerball;
 
 
+import android.app.AlertDialog;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 
 /**
@@ -20,8 +32,28 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class PowerSimulator extends Fragment {
+public Button start,reset;
+public LinearLayout linear;
+public Context mContext;
+public PowerballSimulatorListener listener;
+public ArrayList<SimulatorData> data;
+public PowerballSimulatorService mPlayService;
+public ArrayList<View> viewList = new ArrayList<>();
+    private final ServiceConnection mPlayServiceConnection = new ServiceConnection() {
 
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            PowerballSimulatorService.PowerballSimulatiorServiceBinder binder = (PowerballSimulatorService.PowerballSimulatiorServiceBinder) service;
+            mPlayService = binder.getService();
+            mPlayService.setPowerballSimulatorListener(listener);
+        }
 
+        @Override
+        public void onServiceDisconnected(ComponentName className) {
+
+        }
+
+    };
 
     public PowerSimulator() {
         // Required empty public constructor
@@ -49,7 +81,167 @@ public class PowerSimulator extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_power_simulator, container, false);
+        View view = inflater.inflate(R.layout.fragment_power_simulator, container, false);
+        start = (Button)view.findViewById(R.id.start);
+        if(PowerballSimulatorService.running)
+            start.setText(R.string.stop);
+        reset = (Button)view.findViewById(R.id.reset);
+        linear = (LinearLayout)view.findViewById(R.id.powersimlinear);
+        return view;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        ArrayList<MyTicket> tickets = SharedPrefHelper.getMyTickets(mContext,Constants.POWER_TICKETS);
+        data = SharedPrefHelper.getSimData(mContext,Constants.POWER_SIM);
+        long powerSimCounter = SharedPrefHelper.getLongPowerballCounter(mContext);
+        if(tickets.size() > 0){
+            boolean update = false;
+            for(int x = 0;x < data.size();x++){
+                boolean inside = false;
+                for(int y = 0;y < tickets.size();y++){
+                    if(data.get(x).number.equals(tickets.get(y).ticket)){
+                        inside = true;
+                        update = true;
+                    }
+                }
+                if(!inside){
+                    data.remove(x);
+                }
+            }
+            //checking if each ticket has a corresponding simulatorData and if not making one
+            for(int i = 0;i < tickets.size();i++){
+                boolean contained = false;
+                for(int j = 0;j < data.size();j++){
+                    if(tickets.get(i).ticket.equals(data.get(j).number)){
+                        contained = true;
+                        update = true;
+                    }
+                }
+                if(!contained){
+                    SimulatorData simDat = new SimulatorData();
+                    simDat.number = tickets.get(i).ticket;
+                    simDat.ofsetPlays = powerSimCounter;
+                    data.add(simDat);
+                }
+
+            }
+            if(update){
+                SharedPrefHelper.setSimData(mContext,data,Constants.POWER_SIM);
+                if(PowerballSimulatorService.running)
+                    PowerballSimulatorService.update = true;
+            }
+            reset.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                    builder.setMessage(getString(R.string.messageDialog));
+                    builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            resetButtonWork();
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    AlertDialog dialog1 = builder.create();
+                    dialog1.setTitle(R.string.resetyes);
+                    dialog1.show();
+                }
+            });
+            LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            for(int q = 0;q < data.size();q++){
+                View view = inflater.inflate(R.layout.power_sim, null);
+                View include = view.findViewById(R.id.includesim);
+                TextView ball1 = (TextView) view.findViewById(R.id.ball1);
+                TextView ball2 = (TextView) view.findViewById(R.id.ball2);
+                TextView ball3 = (TextView) view.findViewById(R.id.ball3);
+                TextView ball4 = (TextView) view.findViewById(R.id.ball4);
+                TextView ball5 = (TextView) view.findViewById(R.id.ball5);
+                TextView ball6 = (TextView) view.findViewById(R.id.ball6);
+                TextView win = (TextView)view.findViewById(R.id.win);
+                win.setText("");
+                TextView[] images = {ball1,ball2,ball3,ball4,ball5,ball6};
+                String num = data.get(q).number;
+                String[] split = num.split(" ");
+                for(int j = 0;j < split.length;j++){
+                    images[j].setText(split[j]);
+                }
+                viewList.add(view);
+                linear.addView(view);
+            }
+           listener = new PowerballSimulatorListener() {
+               @Override
+               public void onLottoResult(ArrayList<SimulatorData> listData) {
+                    for(int i = 0;i < listData.size();i++){
+                        SimulatorData singleData = listData.get(i);
+                        View view = viewList.get(i);
+                        //TODO populate all of the views with the simulator data
+                    }
+               }
+           };
+        }else{
+            start.setEnabled(false);
+            reset.setEnabled(false);
+        }
+    }
+    public void resetButtonWork(){
+        data.clear();
+        SharedPrefHelper.setSimData(mContext,data,Constants.POWER_SIM);
+        SharedPrefHelper.setLongPowerballCounter(mContext,0);
+        ArrayList<MyTicket> tickets = SharedPrefHelper.getMyTickets(mContext,Constants.POWER_TICKETS);
+        data = SharedPrefHelper.getSimData(mContext,Constants.POWER_SIM);
+        long powerSimCounter = SharedPrefHelper.getLongPowerballCounter(mContext);
+        if(tickets.size() > 0){
+            boolean update = false;
+            for(int x = 0;x < data.size();x++){
+                boolean inside = false;
+                for(int y = 0;y < tickets.size();y++){
+                    if(data.get(x).number.equals(tickets.get(y).ticket)){
+                        inside = true;
+                        update = true;
+                    }
+                }
+                if(!inside){
+                    data.remove(x);
+                }
+            }
+            //checking if each ticket has a corresponding simulatorData and if not making one
+            for(int i = 0;i < tickets.size();i++){
+                boolean contained = false;
+                for(int j = 0;j < data.size();j++){
+                    if(tickets.get(i).ticket.equals(data.get(j).number)){
+                        contained = true;
+                        update = true;
+                    }
+                }
+                if(!contained){
+                    SimulatorData simDat = new SimulatorData();
+                    simDat.number = tickets.get(i).ticket;
+                    simDat.ofsetPlays = powerSimCounter;
+                    data.add(simDat);
+                }
+
+            }
+            if(update){
+                SharedPrefHelper.setSimData(mContext,data,Constants.POWER_SIM);
+                if(PowerballSimulatorService.running)
+                    PowerballSimulatorService.update = true;
+            }
+
+
+        }
+    }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
+    }
 }

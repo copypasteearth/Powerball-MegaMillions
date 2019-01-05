@@ -26,6 +26,11 @@
     <string name="totalplays">Total Plays</string>
     <string name="reset">Reset</string>
     <string name="start">Start</string>
+    <string name="stop">Stop</string>
+    <string name="messageDialog">Are you sure you want to reset the simulation</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="resetyes">Reset Simulation</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
