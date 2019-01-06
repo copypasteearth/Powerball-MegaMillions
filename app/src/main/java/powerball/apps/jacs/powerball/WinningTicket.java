@@ -32,9 +32,9 @@ public class WinningTicket implements Serializable {
 
     }
     public String calculateWin(String ticket){
-        if(winningNumber.equals(ticket)){
-            return "Jackpot!!!";
-        }
+       // if(winningNumber.equals(ticket)){
+       //     return "Jackpot!!!";
+       // }
         String[] win = winningNumber.split(",");
         String[] yours = ticket.split(" ");
         boolean powerballhit = false;
@@ -50,6 +50,9 @@ public class WinningTicket implements Serializable {
             }
 
         }
+        if(count == 5 && powerballhit){
+            return "Jackpot!!!";
+        }
         if(count == 5){
             return "1 Million winner!!";
         }
@@ -60,19 +63,19 @@ public class WinningTicket implements Serializable {
             return "$100 hit";
         }
         if(count == 3 && powerballhit){
-            return "$100 hit";
+            return "$100 hit-";
         }
         if(count == 3){
             return "$7 hit";
         }
         if(count == 2 && powerballhit){
-            return "$7 hit";
+            return "$7 hit-";
         }
         if(count == 1 && powerballhit){
             return "$4 hit";
         }
         if(powerballhit){
-            return "$4 hit";
+            return "$4 hit-";
         }
         return "Nothing :(";
 

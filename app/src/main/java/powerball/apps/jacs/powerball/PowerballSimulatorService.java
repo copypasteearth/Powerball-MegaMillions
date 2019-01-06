@@ -22,9 +22,11 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 
 public class PowerballSimulatorService extends Service {
-    private final IBinder mBinder = new PowerballSimulatiorServiceBinder();
+    private final IBinder mBinder = new PowerballSimulatorServiceBinder();
     private PowerballSimulatorListener listener;
     public static boolean running = false;
     public static boolean update = false;
@@ -41,10 +43,157 @@ public class PowerballSimulatorService extends Service {
                 counter = SharedPrefHelper.getLongPowerballCounter(PowerballSimulatorService.this);
                 update = false;
             }
+            Random random = new Random();
+            ArrayList<Integer> nums = new ArrayList<>();
+            while(nums.size() < 6){
+                Integer num = random.nextInt(69) + 1;
+                if(!nums.contains(num)){
+                    nums.add(num);
+                }
+            }
+            Integer power = random.nextInt(26) + 1;
+            Collections.sort(nums);
+            String number = nums.get(0) + "," + nums.get(1) + "," + nums.get(2) + "," + nums.get(3) + "," + nums.get(4) + "," + nums.get(5) + "," + power;
+
+            //Log.d("powerballnumber","number : " + number);
+            WinningTicket ticket = new WinningTicket();
+            ticket.winningNumber = number;
             counter++;
             //SharedPrefHelper.setLongPowerballCounter(PowerballSimulatorService.this,counter);
             for(int i = 0;i<data.size();i++){
                 data.get(i).plays = counter - data.get(i).ofsetPlays;
+                data.get(i).incrementCounter();
+                String winning = ticket.calculateWin(data.get(i).number);
+                if(winning.equals("Nothing :(")){
+                    continue;
+                }
+                if(winning.equals("Jackpot!!!")){
+                    data.get(i).jackpotHits++;
+                    data.get(i).jackpotAvg = data.get(i).plays / data.get(i).jackpotHits;
+                    if(data.get(i).jackpotMin <= 0){
+                        data.get(i).jackpotMin = data.get(i).getCounter(0);
+                        data.get(i).resetCounter(0);
+                    }else{
+                        if(data.get(i).getCounter(0) < data.get(i).jackpotMin){
+                            data.get(i).jackpotMin = data.get(i).getCounter(0);
+                            data.get(i).resetCounter(0);
+                        }else{
+                            data.get(i).resetCounter(0);
+                        }
+                    }
+                }else if(winning.equals("1 Million winner!!")){
+                    data.get(i).white5Hits++;
+                    data.get(i).white5Avg = data.get(i).plays / data.get(i).white5Hits;
+                    if(data.get(i).white5Min <= 0){
+                        data.get(i).white5Min = data.get(i).getCounter(1);
+                        data.get(i).resetCounter(1);
+                    }else{
+                        if(data.get(i).getCounter(1) < data.get(i).white5Min){
+                            data.get(i).white5Min = data.get(i).getCounter(1);
+                            data.get(i).resetCounter(1);
+                        }else{
+                            data.get(i).resetCounter(1);
+                        }
+                    }
+                }else if(winning.equals("50,000 hit!!!")){
+                    data.get(i).white4PowHits++;
+                    data.get(i).white4PowAvg = data.get(i).plays / data.get(i).white4PowHits;
+                    if(data.get(i).white4PowMin <= 0){
+                        data.get(i).white4PowMin = data.get(i).getCounter(2);
+                        data.get(i).resetCounter(2);
+                    }else{
+                        if(data.get(i).getCounter(2) < data.get(i).white4PowMin){
+                            data.get(i).white4PowMin = data.get(i).getCounter(2);
+                            data.get(i).resetCounter(2);
+                        }else{
+                            data.get(i).resetCounter(2);
+                        }
+                    }
+                }else if(winning.equals("$100 hit")){
+                    data.get(i).white4Hits++;
+                    data.get(i).white4Avg = data.get(i).plays / data.get(i).white4Hits;
+                    if(data.get(i).white4Min <= 0){
+                        data.get(i).white4Min = data.get(i).getCounter(3);
+                        data.get(i).resetCounter(3);
+                    }else{
+                        if(data.get(i).getCounter(3) < data.get(i).white4Min){
+                            data.get(i).white4Min = data.get(i).getCounter(3);
+                            data.get(i).resetCounter(3);
+                        }else{
+                            data.get(i).resetCounter(3);
+                        }
+                    }
+                }else if(winning.equals("$100 hit-")){
+                    data.get(i).white3PowHits++;
+                    data.get(i).white3PowAvg = data.get(i).plays / data.get(i).white3PowHits;
+                    if(data.get(i).white3PowMin <= 0){
+                        data.get(i).white3PowMin = data.get(i).getCounter(4);
+                        data.get(i).resetCounter(4);
+                    }else{
+                        if(data.get(i).getCounter(4) < data.get(i).white3PowMin){
+                            data.get(i).white3PowMin = data.get(i).getCounter(4);
+                            data.get(i).resetCounter(4);
+                        }else{
+                            data.get(i).resetCounter(4);
+                        }
+                    }
+                }else if(winning.equals("$7 hit")){
+                    data.get(i).white3Hits++;
+                    data.get(i).white3Avg = data.get(i).plays / data.get(i).white3Hits;
+                    if(data.get(i).white3Min <= 0){
+                        data.get(i).white3Min = data.get(i).getCounter(5);
+                        data.get(i).resetCounter(5);
+                    }else{
+                        if(data.get(i).getCounter(5) < data.get(i).white3Min){
+                            data.get(i).white3Min = data.get(i).getCounter(5);
+                            data.get(i).resetCounter(5);
+                        }else{
+                            data.get(i).resetCounter(5);
+                        }
+                    }
+                }else if(winning.equals("$7 hit-")){
+                    data.get(i).white2PowHits++;
+                    data.get(i).white2PowAvg = data.get(i).plays / data.get(i).white2PowHits;
+                    if(data.get(i).white2PowMin <= 0){
+                        data.get(i).white2PowMin = data.get(i).getCounter(6);
+                        data.get(i).resetCounter(6);
+                    }else{
+                        if(data.get(i).getCounter(6) < data.get(i).white2PowMin){
+                            data.get(i).white2PowMin = data.get(i).getCounter(6);
+                            data.get(i).resetCounter(6);
+                        }else{
+                            data.get(i).resetCounter(6);
+                        }
+                    }
+                }else if(winning.equals("$4 hit")){
+                    data.get(i).white1PowHits++;
+                    data.get(i).white1PowAvg = data.get(i).plays / data.get(i).white1PowHits;
+                    if(data.get(i).white1PowMin <= 0){
+                        data.get(i).white1PowMin = data.get(i).getCounter(7);
+                        data.get(i).resetCounter(7);
+                    }else{
+                        if(data.get(i).getCounter(7) < data.get(i).white1PowMin){
+                            data.get(i).white1PowMin = data.get(i).getCounter(7);
+                            data.get(i).resetCounter(7);
+                        }else{
+                            data.get(i).resetCounter(7);
+                        }
+                    }
+                }else if(winning.equals("$4 hit-")){
+                    data.get(i).nowhitePowHits++;
+                    data.get(i).nowhitePowAvg = data.get(i).plays / data.get(i).nowhitePowHits;
+                    if(data.get(i).nowhitePowMin <= 0){
+                        data.get(i).nowhitePowMin = data.get(i).getCounter(8);
+                        data.get(i).resetCounter(8);
+                    }else{
+                        if(data.get(i).getCounter(8) < data.get(i).nowhitePowMin){
+                            data.get(i).nowhitePowMin = data.get(i).getCounter(8);
+                            data.get(i).resetCounter(8);
+                        }else{
+                            data.get(i).resetCounter(8);
+                        }
+                    }
+                }
 
             }
             //SharedPrefHelper.setSimData(PowerballSimulatorService.this,data,Constants.POWER_SIM);
@@ -147,7 +296,7 @@ public class PowerballSimulatorService extends Service {
         Log.d("powerservice","service destroyed");
     }
 
-    public class PowerballSimulatiorServiceBinder extends Binder {
+    public class PowerballSimulatorServiceBinder extends Binder {
         public PowerballSimulatorService getService() {
             // Return this instance of LocalService so clients can call public methods
             return PowerballSimulatorService.this;

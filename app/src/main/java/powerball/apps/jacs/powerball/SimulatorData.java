@@ -38,8 +38,20 @@ public class SimulatorData {
     public long nowhitePowHits;
     public long nowhitePowAvg;
     public long nowhitePowMin;
+    public long[] counter = new long[9];
     public SimulatorData(){
 
+    }
+    public void incrementCounter(){
+        for(int i = 0;i < counter.length;i++){
+            counter[i]++;
+        }
+    }
+    public void resetCounter(int x){
+        counter[x] = 0;
+    }
+    public long getCounter(int x){
+        return counter[x];
     }
     public String getDays(long num,String yearString,String weekString){
         long remainderPlays = num % 104;
