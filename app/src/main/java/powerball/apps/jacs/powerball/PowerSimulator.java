@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -105,7 +106,12 @@ public boolean binding = false;
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         ArrayList<MyTicket> tickets = SharedPrefHelper.getMyTickets(mContext,Constants.POWER_TICKETS);
-        data = SharedPrefHelper.getSimData(mContext,Constants.POWER_SIM);
+        if(PowerballSimulatorService.running){
+            data = PowerballSimulatorService.data;
+        }else{
+            data = SharedPrefHelper.getSimData(mContext,Constants.POWER_SIM);
+        }
+
        Log.d("powerservice","fragment size: " + data);
         long powerSimCounter = SharedPrefHelper.getLongPowerballCounter(mContext);
         if(tickets.size() > 0){
@@ -115,11 +121,12 @@ public boolean binding = false;
                 for(int y = 0;y < tickets.size();y++){
                     if(data.get(x).number.equals(tickets.get(y).ticket)){
                         inside = true;
-                        update = true;
+
                     }
                 }
                 if(!inside){
                     data.remove(x);
+                    update = true;
                 }
             }
             //checking if each ticket has a corresponding simulatorData and if not making one
@@ -134,7 +141,12 @@ public boolean binding = false;
                 if(!contained){
                     SimulatorData simDat = new SimulatorData();
                     simDat.number = tickets.get(i).ticket;
-                    simDat.ofsetPlays = powerSimCounter;
+                    if(PowerballSimulatorService.running){
+                        simDat.ofsetPlays = PowerballSimulatorService.counter;
+                    }else{
+                        simDat.ofsetPlays = powerSimCounter;
+                    }
+
                     data.add(simDat);
                     update = true;
                 }
@@ -143,8 +155,11 @@ public boolean binding = false;
 
             if(update){
                 SharedPrefHelper.setSimData(mContext,data,Constants.POWER_SIM);
-                if(PowerballSimulatorService.running)
+                if(PowerballSimulatorService.running){
+                    SharedPrefHelper.setLongPowerballCounter(mContext,PowerballSimulatorService.counter);
                     PowerballSimulatorService.update = true;
+                }
+
             }
             reset.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -204,6 +219,15 @@ public boolean binding = false;
                        //TODO populate all of the views with the simulator data
                    }
                }
+
+               @Override
+               public void stopLottoService() {
+                   Intent intent = new Intent(mContext,PowerballSimulatorService.class);
+                   mContext.unbindService(mPlayServiceConnection);
+                   binding = false;
+                   mContext.stopService(intent);
+                   start.setText(R.string.start);
+               }
            };
             mPlayServiceConnection = new ServiceConnection() {
 
@@ -233,7 +257,13 @@ public boolean binding = false;
                         start.setText(R.string.start);
                     }else{
                         Intent intent = new Intent(mContext,PowerballSimulatorService.class);
-                        mContext.startService(intent);
+                        if(Build.VERSION.SDK_INT >25){
+                            mContext.startForegroundService(intent);
+                        }else{
+                            mContext.startService(intent);
+                        }
+
+
                         mContext.bindService(intent,mPlayServiceConnection,Context.BIND_AUTO_CREATE);
                         binding = true;
                         start.setText(R.string.stop);
@@ -277,7 +307,7 @@ public boolean binding = false;
                 for(int j = 0;j < data.size();j++){
                     if(tickets.get(i).ticket.equals(data.get(j).number)){
                         contained = true;
-                        update = true;
+
                     }
                 }
                 if(!contained){
@@ -285,6 +315,7 @@ public boolean binding = false;
                     simDat.number = tickets.get(i).ticket;
                     simDat.ofsetPlays = powerSimCounter;
                     data.add(simDat);
+                    update = true;
                 }
 
             }
@@ -293,6 +324,29 @@ public boolean binding = false;
                 SharedPrefHelper.setSimData(mContext,data,Constants.POWER_SIM);
                 if(PowerballSimulatorService.running)
                     PowerballSimulatorService.update = true;
+            }
+            linear.removeAllViews();
+            viewList.clear();
+            LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            for(int q = 0;q < data.size();q++){
+                View view = inflater.inflate(R.layout.power_sim, null);
+                View include = view.findViewById(R.id.includesim);
+                TextView ball1 = (TextView) view.findViewById(R.id.ball1);
+                TextView ball2 = (TextView) view.findViewById(R.id.ball2);
+                TextView ball3 = (TextView) view.findViewById(R.id.ball3);
+                TextView ball4 = (TextView) view.findViewById(R.id.ball4);
+                TextView ball5 = (TextView) view.findViewById(R.id.ball5);
+                TextView ball6 = (TextView) view.findViewById(R.id.ball6);
+                TextView win = (TextView)view.findViewById(R.id.win);
+                win.setText("");
+                TextView[] images = {ball1,ball2,ball3,ball4,ball5,ball6};
+                String num = data.get(q).number;
+                String[] split = num.split(" ");
+                for(int j = 0;j < split.length;j++){
+                    images[j].setText(split[j]);
+                }
+                viewList.add(view);
+                linear.addView(view);
             }
 
 

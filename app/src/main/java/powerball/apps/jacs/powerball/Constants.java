@@ -21,4 +21,5 @@ public class Constants {
     public static final String POWER_LONG_COUNTER = "powerlong";
     public static final int MEGA_FOREGROUND = 10001;
     public static final int POWER_FOREGROUND = 10000;
+    public static final int POWER_SIM_FOREGROUND = 10002;
 }

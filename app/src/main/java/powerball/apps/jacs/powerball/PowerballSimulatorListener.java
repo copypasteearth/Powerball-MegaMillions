@@ -10,4 +10,5 @@ import java.util.ArrayList;
 
 public interface PowerballSimulatorListener {
     void onLottoResult(ArrayList<SimulatorData> listData);
+    void stopLottoService();
 }
