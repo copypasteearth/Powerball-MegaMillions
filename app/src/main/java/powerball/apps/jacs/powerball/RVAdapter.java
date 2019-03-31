@@ -167,7 +167,7 @@ return null;
                 if(type.equals(Constants.POWERBALL)){
                     for(int j = 0;j < split1.length;j++){
                         if(j == split1.length - 1){
-                            if(split1[j].equals(splittick[j])){
+                            if(Integer.parseInt(split1[j]) == Integer.parseInt(splittick[j])){
                                 images1[j].setBackground(ResourcesCompat.getDrawable(holder.context.getResources(), R.drawable.powerstar1, null));
                                 images1[j].setText(splittick[j]);
                             }else{
@@ -175,7 +175,7 @@ return null;
                             }
                         }else{
                             for(int z = 0;z < split1.length - 1;z++){
-                                if(split1[z].equals(splittick[j])){
+                                if(Integer.parseInt(split1[z]) == Integer.parseInt(splittick[j])){
                                     images1[j].setBackground(ResourcesCompat.getDrawable(holder.context.getResources(), R.drawable.ball1star, null));
                                     images1[j].setText(splittick[j]);
                                 }else{
@@ -189,7 +189,7 @@ return null;
                 }else{
                     for(int j = 0;j < split1.length;j++){
                         if(j == split1.length - 1){
-                            if(split1[j].equals(splittick[j])){
+                            if(Integer.parseInt(split1[j]) == Integer.parseInt(splittick[j])){
                                 images1[j].setBackground(ResourcesCompat.getDrawable(holder.context.getResources(), R.drawable.megastar1, null));
                                 images1[j].setText(splittick[j]);
                             }else{
@@ -197,7 +197,7 @@ return null;
                             }
                         }else{
                             for(int z = 0;z < split1.length - 1;z++){
-                                if(split1[z].equals(splittick[j])){
+                                if(Integer.parseInt(split1[z]) == Integer.parseInt(splittick[j])){
                                     images1[j].setBackground(ResourcesCompat.getDrawable(holder.context.getResources(), R.drawable.ball1star, null));
                                     images1[j].setText(splittick[j]);
                                 }else{

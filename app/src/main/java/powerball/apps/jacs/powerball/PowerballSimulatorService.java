@@ -243,46 +243,51 @@ public class PowerballSimulatorService extends Service {
 
                 }
             }else{
-                Intent notificationIntent = new Intent(this, MainActivity.class);
-                PendingIntent pendingIntent =
-                        PendingIntent.getActivity(this, 0, notificationIntent, 0);
-                Intent serviceIntent = new Intent(this,PowerballSimulatorService.class);
-                serviceIntent.putExtra("shutdown","shutdown");
-                PendingIntent pendingServiceShutdown = PendingIntent.getService(this,20,serviceIntent,0);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    CharSequence name = "Powerball";
-                    String description = "Powerball Notification";
-                    int importance = NotificationManager.IMPORTANCE_DEFAULT;
-                    NotificationChannel channel = new NotificationChannel("10101010101", name, importance);
-                    channel.setDescription(description);
-                    // Register the channel with the system; you can't change the importance
-                    // or other notification behaviors after this
-                    NotificationManager notificationManager = getSystemService(NotificationManager.class);
-                    notificationManager.createNotificationChannel(channel);
-                }
-                Notification notification =
-                        new NotificationCompat.Builder(this, "10101010101")
-                                .setContentTitle(getText(R.string.powerball))
-                                .setContentText(getText(R.string.simrunning))
-
-                                .setSmallIcon(R.drawable.powerstar1)
-                                .setContentIntent(pendingIntent)
-                                .setTicker(getText(R.string.powerball))
-                                .addAction(R.drawable.powerstar1,getText(R.string.stop),pendingServiceShutdown)
-                                .build();
-                startForeground(Constants.POWER_SIM_FOREGROUND,notification);
-                running = true;
-                counter = SharedPrefHelper.getLongPowerballCounter(this);
-                data = SharedPrefHelper.getSimData(this,Constants.POWER_SIM);
-                Log.d("powerservice", "data size: " + data.size());
-                handler.postDelayed(serviceRunnable, 0);
-                Log.d("powerservice","onstartcommand");
+               setUpForeground();
             }
 
+        }else{
+            setUpForeground();
         }
 
         return START_STICKY;
 
+    }
+    public void setUpForeground(){
+        Intent notificationIntent = new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent =
+                PendingIntent.getActivity(this, 0, notificationIntent, 0);
+        Intent serviceIntent = new Intent(this,PowerballSimulatorService.class);
+        serviceIntent.putExtra("shutdown","shutdown");
+        PendingIntent pendingServiceShutdown = PendingIntent.getService(this,20,serviceIntent,0);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Powerball";
+            String description = "Powerball Notification";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("10101010101", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+        Notification notification =
+                new NotificationCompat.Builder(this, "10101010101")
+                        .setContentTitle(getText(R.string.powerball))
+                        .setContentText(getText(R.string.simrunning))
+
+                        .setSmallIcon(R.drawable.powerstar1)
+                        .setContentIntent(pendingIntent)
+                        .setTicker(getText(R.string.powerball))
+                        .addAction(R.drawable.powerstar1,getText(R.string.stop),pendingServiceShutdown)
+                        .build();
+        startForeground(Constants.POWER_SIM_FOREGROUND,notification);
+        running = true;
+        counter = SharedPrefHelper.getLongPowerballCounter(this);
+        data = SharedPrefHelper.getSimData(this,Constants.POWER_SIM);
+        Log.d("powerservice", "data size: " + data.size());
+        handler.postDelayed(serviceRunnable, 0);
+        Log.d("powerservice","onstartcommand");
     }
 
     @Override

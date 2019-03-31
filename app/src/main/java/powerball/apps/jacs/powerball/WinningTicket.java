@@ -38,13 +38,13 @@ public class WinningTicket implements Serializable {
         String[] win = winningNumber.split(",");
         String[] yours = ticket.split(" ");
         boolean powerballhit = false;
-        if(win[win.length - 1].equals(yours[yours.length - 1])){
+        if(Integer.parseInt(win[win.length - 1]) == Integer.parseInt(yours[yours.length - 1])){
             powerballhit = true;
         }
         int count = 0;
         for(int i = 0;i < win.length - 1;i++){
             for(int j = 0;j < win.length - 1;j++){
-                if(win[i].equals(yours[j])){
+                if(Integer.parseInt(win[i]) == Integer.parseInt(yours[j])){
                     count++;
                 }
             }

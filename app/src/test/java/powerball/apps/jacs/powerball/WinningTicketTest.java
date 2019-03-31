@@ -49,6 +49,21 @@ public class WinningTicketTest {
         assertEquals("Nothing :(",ticket.calculateWin("11 12 13 14 15 16"));
     }
     @Test
+    public void testCalculateWinMethodWithLeadingZero(){
+        WinningTicket ticket = new WinningTicket();
+        ticket.winningNumber = "01,02,03,04,05,06";
+        assertEquals("Jackpot!!!",ticket.calculateWin("1 2 3 4 5 6"));
+        assertEquals("1 Million winner!!",ticket.calculateWin("1 2 3 4 5 7"));
+        assertEquals("50,000 hit!!!",ticket.calculateWin("1 2 3 4 8 6"));
+        assertEquals("$100 hit",ticket.calculateWin("1 2 3 4 9 8"));
+        assertEquals("$100 hit-",ticket.calculateWin("1 2 3 9 8 6"));
+        assertEquals("$7 hit",ticket.calculateWin("1 2 3 12 13 14"));
+        assertEquals("$7 hit-",ticket.calculateWin("1 2 12 13 14 6"));
+        assertEquals("$4 hit",ticket.calculateWin("1 12 13 14 15 6"));
+        assertEquals("$4 hit-",ticket.calculateWin("11 12 13 14 15 6"));
+        assertEquals("Nothing :(",ticket.calculateWin("11 12 13 14 15 16"));
+    }
+    @Test
     public void testEqualAndHashCodeMethods(){
         String date = new Date().toString();
         String mult = "none";

@@ -236,7 +236,7 @@ public class MegaBackgroundService extends Service {
                                                             for(int j = 0;j < split.length;j++){
                                                                 //images[j].setText(split[j]);
                                                                 if(j == split.length - 1){
-                                                                    if(split[j].equals(winner[j])){
+                                                                    if(Integer.parseInt(split[j])==Integer.parseInt(winner[j])){
                                                                         log.setInt(images[j], "setBackgroundResource", R.drawable.megastar1);
                                                                         log.setTextColor(images[j], Color.BLACK);
                                                                         log.setTextViewText(images[j],split[j]);
@@ -246,7 +246,7 @@ public class MegaBackgroundService extends Service {
                                                                     }
                                                                 }else{
                                                                     for(int z = 0;z < split.length -1;z++){
-                                                                        if(split[j].equals(winner[z])){
+                                                                        if(Integer.parseInt(split[j])==Integer.parseInt(winner[z])){
                                                                             log.setInt(images[j], "setBackgroundResource", R.drawable.ball1star);
                                                                             log.setTextColor(images[j], Color.BLACK);
                                                                             log.setTextViewText(images[j],split[j]);
