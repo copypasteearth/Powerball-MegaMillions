@@ -83,7 +83,7 @@ class RVAdapter internal constructor(var tickets: List<WinningTicket?>?, recycle
             win.text = ""
             val images = arrayOf(ball1, ball2, ball3, ball4, ball5, ball6)
             val num = tickets!![position]!!.winningNumber
-            val split = num?.split(",")?.toTypedArray()
+            val split = num?.split(" ")?.toTypedArray()
             for (j in split?.indices!!) {
                 images[j].text = split?.get(j)
             }
@@ -132,7 +132,7 @@ class RVAdapter internal constructor(var tickets: List<WinningTicket?>?, recycle
                 val num1 = tickets!![position]!!.winningNumber
                 var tick: String? = ""
                 tick = tick1.ticket
-                val split1 = num1?.split(",")?.toTypedArray()
+                val split1 = num1?.split(" ")?.toTypedArray()
                 val splittick = tick!!.split(" ").toTypedArray()
                 if (type == Constants.POWERBALL) {
                     for (j in split1!!.indices) {

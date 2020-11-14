@@ -33,7 +33,7 @@ class WinningTicketTest {
     @Test
     fun testCalculateWinMethod() {
         val ticket = WinningTicket()
-        ticket.winningNumber = "1,2,3,4,5,6"
+        ticket.winningNumber = "1 2 3 4 5 6"
         Assert.assertEquals("Jackpot!!!", ticket.calculateWin("1 2 3 4 5 6"))
         Assert.assertEquals("1 Million winner!!", ticket.calculateWin("1 2 3 4 5 7"))
         Assert.assertEquals("50,000 hit!!!", ticket.calculateWin("1 2 3 4 8 6"))
@@ -49,7 +49,7 @@ class WinningTicketTest {
     @Test
     fun testCalculateWinMethodWithLeadingZero() {
         val ticket = WinningTicket()
-        ticket.winningNumber = "01,02,03,04,05,06"
+        ticket.winningNumber = "01 02 03 04 05 06"
         Assert.assertEquals("Jackpot!!!", ticket.calculateWin("1 2 3 4 5 6"))
         Assert.assertEquals("1 Million winner!!", ticket.calculateWin("1 2 3 4 5 7"))
         Assert.assertEquals("50,000 hit!!!", ticket.calculateWin("1 2 3 4 8 6"))

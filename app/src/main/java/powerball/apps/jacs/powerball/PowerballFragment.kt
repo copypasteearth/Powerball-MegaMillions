@@ -19,12 +19,20 @@ import android.view.ViewGroup
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.Volley
+import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONException
+import powerball.apps.jacs.powerball.data.power.PowerballData
+import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
 
 //https://data.ny.gov/resource/d6yy-54nr.json
 class PowerballFragment : Fragment() {
+    val url = "https://data.ny.gov/resource/d6yy-54nr.json"
     var tickets = ArrayList<WinningTicket?>()
     var inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
     lateinit var now: Calendar
@@ -77,100 +85,28 @@ class PowerballFragment : Fragment() {
         past = Calendar.getInstance()
         past.add(Calendar.MONTH, -1)
         //String url = "http://data.ny.gov/resource/d6yy-54nr.json";
-        val url = "https://www.powerball.com/api/v1/numbers/powerball?_format=json&fromDate=" + inputFormat.format(past.getTime()).replace(" ", "%20") + "&toDate=" + inputFormat.format(now.getTime()).replace(" ", "%20")
-        Log.d("timer", url)
-        val jsonArrayRequest = JsonArrayRequest(url, { response ->
-            try {
-                if (response.length() > 0) {
-                    Log.d("timer", "response$response")
-                    tickets.clear()
-                    for (i in 0 until response.length()) {
-                        val jsonObject = response.getJSONObject(i)
-                        val person = WinningTicket()
-                        if (!jsonObject.isNull("field_draw_date")) {
-                            person.date = jsonObject.getString("field_draw_date")
-                        }
-                        if (!jsonObject.isNull("field_winning_numbers")) {
-                            person.winningNumber = jsonObject.getString("field_winning_numbers")
-                        }
-                        if (!jsonObject.isNull("field_multiplier")) {
-                            person.multiplier = jsonObject.getString("field_multiplier")
-                        }
-                        //if(!first){
-                        //    WinningTicket tick = SharedPrefHelper.getSharedOBJECT(getApplicationContext(),"ticket");
-                        //    if(tick == null || !tick.equals(person)){
-                        //        SharedPrefHelper.setSharedOBJECT(getApplicationContext(),"ticket",person);
-                        //    }
-                        //    first = true;
-                        //}
-                        tickets.add(counter, person)
+
+        GlobalScope.launch {
+            withContext(Dispatchers.IO){
+                val json = URL(url).readText()
+                Log.d("jsondata", json)
+                val gson = Gson()
+                val powerballData = gson.fromJson(json, PowerballData::class.java)
+                for(ticket in powerballData){
+                    val person = WinningTicket()
+                    person.date = ticket.draw_date//jsonObject.getString("field_draw_date")
+                    person.winningNumber = ticket.winning_numbers
+                    person.multiplier = ticket.multiplier
+                    tickets.add(counter, person)
+                    rv.post{
                         rvAdapter.notifyItemInserted(counter)
-                        counter++
                     }
-                    // rvAdapter.notifyDataSetChanged();
+
+                    counter++
                 }
-            } catch (e: JSONException) {
-                e.printStackTrace()
             }
-        }) { error -> // do something
-            Log.d("timer", "error : $error")
         }
-        requestQueue.add(jsonArrayRequest)
-        rvAdapter.setOnLoadMoreListener(object : OnLoadMoreListener {
-            override fun onLoadMore() {
-                Log.d("timer", "loading more")
-                tickets.add(null)
-                rvAdapter.notifyItemInserted(tickets.size - 1)
-                now = past.clone() as Calendar
-                past.add(Calendar.MONTH, -1)
-                Log.d("timer", "dates:::::: " + now!!.time.toString() + "  :  " + past.getTime().toString())
-                val url = "https://www.powerball.com/api/v1/numbers/powerball?_format=json&min=" + inputFormat.format(past.getTime()).replace(" ", "%20") + "&max=" + inputFormat.format(now!!.time).replace(" ", "%20")
-                val jsonArrayRequest = JsonArrayRequest(url, { response ->
-                    try {
-                        if (response.length() > 0) {
-                            Log.d("timer", "response$response")
-                            //tickets.clear();
-                            tickets.removeAt(tickets.size - 1)
-                            rvAdapter.notifyItemRemoved(tickets.size)
-                            for (i in 0 until response.length()) {
-                                val jsonObject = response.getJSONObject(i)
-                                val person = WinningTicket()
-                                if (!jsonObject.isNull("field_draw_date")) {
-                                    person.date = jsonObject.getString("field_draw_date")
-                                }
-                                if (!jsonObject.isNull("field_winning_numbers")) {
-                                    person.winningNumber = jsonObject.getString("field_winning_numbers")
-                                }
-                                if (!jsonObject.isNull("field_multiplier")) {
-                                    person.multiplier = jsonObject.getString("field_multiplier")
-                                }
-                                //if(!first){
-                                //    WinningTicket tick = SharedPrefHelper.getSharedOBJECT(getApplicationContext(),"ticket");
-                                //    if(tick == null || !tick.equals(person)){
-                                //        SharedPrefHelper.setSharedOBJECT(getApplicationContext(),"ticket",person);
-                                //    }
-                                //    first = true;
-                                //}
-                                //tickets.add( person);
-                                if (!tickets.contains(person)) {
-                                    tickets.add(counter, person)
-                                    rvAdapter.notifyItemInserted(counter)
-                                    counter++
-                                }
-                            }
-                            // rvAdapter.notifyDataSetChanged();
-                            //contactAdapter.notifyDataSetChanged();
-                            rvAdapter.setLoaded()
-                        }
-                    } catch (e: JSONException) {
-                        e.printStackTrace()
-                    }
-                }) { error -> // do something
-                    Log.d("timer", "error : " + error.localizedMessage + error.networkResponse.statusCode)
-                }
-                requestQueue.add(jsonArrayRequest)
-            }
-        })
+
     }
 
     companion object {

@@ -21,15 +21,24 @@ import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
+import powerball.apps.jacs.powerball.data.mega.MegamillionsData
+import powerball.apps.jacs.powerball.data.power.PowerballData
 import java.io.StringReader
+import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
 
 //https://data.ny.gov/resource/5xaw-6ayf.json
 class MegaMillionsFragment : Fragment() {
+    val url = "https://data.ny.gov/resource/5xaw-6ayf.json"
     var tickets = ArrayList<WinningTicket?>()
     var inputFormat = SimpleDateFormat("yyyy-MM-dd")
     lateinit var now: Calendar
@@ -82,180 +91,26 @@ class MegaMillionsFragment : Fragment() {
         past = Calendar.getInstance()
         past.add(Calendar.MONTH, -1)
         //String url = "http://data.ny.gov/resource/d6yy-54nr.json";
-        val url = "https://www.megamillions.com/cmspages/utilservice.asmx/GetDrawingPagingData?pageNumber=1&pageSize=21&startDate=" + inputFormat.format(past.getTime()) + "&endDate=" + inputFormat.format(now.getTime())
-        Log.d("timer", url)
-        val stringRequest = StringRequest(Request.Method.GET, url,
-                { response ->
-                    try {
-                        val factory = XmlPullParserFactory.newInstance()
-                        factory.isNamespaceAware = true
-                        val parser = factory.newPullParser()
-                        parser.setInput(StringReader(response))
-                        var eventType = parser.eventType
-                        while (eventType != XmlPullParser.END_DOCUMENT) {
-                            if (eventType == XmlPullParser.START_TAG) {
-                                val name = parser.name
-                                if (name == "string") {
-                                    if (parser.next() == XmlPullParser.TEXT) {
-                                        val json = parser.text
-                                        val `object` = JSONObject(json)
-                                        val array = `object`.getJSONArray("DrawingData")
-                                        for (i in 0 until array.length()) {
-                                            val jsonObject = array.getJSONObject(i)
-                                            val person = WinningTicket()
-                                            var ball1 = 0
-                                            var ball2 = 0
-                                            var ball3 = 0
-                                            var ball4 = 0
-                                            var ball5 = 0
-                                            var ball6 = 0
-                                            var mega: Int
-                                            if (!jsonObject.isNull("PlayDate")) {
-                                                person.date = jsonObject.getString("PlayDate")
-                                            }
-                                            if (!jsonObject.isNull("N1")) {
-                                                ball1 = jsonObject.getInt("N1")
-                                            }
-                                            if (!jsonObject.isNull("N2")) {
-                                                ball2 = jsonObject.getInt("N2")
-                                            }
-                                            if (!jsonObject.isNull("N3")) {
-                                                ball3 = jsonObject.getInt("N3")
-                                            }
-                                            if (!jsonObject.isNull("N4")) {
-                                                ball4 = jsonObject.getInt("N4")
-                                            }
-                                            if (!jsonObject.isNull("N5")) {
-                                                ball5 = jsonObject.getInt("N5")
-                                            }
-                                            if (!jsonObject.isNull("MBall")) {
-                                                ball6 = jsonObject.getInt("MBall")
-                                            }
-                                            if (!jsonObject.isNull("Megaplier")) {
-                                                person.multiplier = jsonObject.getString("Megaplier")
-                                            }
-                                            person.winningNumber = "$ball1,$ball2,$ball3,$ball4,$ball5,$ball6"
-                                            //if(!first){
-                                            //    WinningTicket tick = SharedPrefHelper.getSharedOBJECT(getApplicationContext(),"ticket");
-                                            //    if(tick == null || !tick.equals(person)){
-                                            //        SharedPrefHelper.setSharedOBJECT(getApplicationContext(),"ticket",person);
-                                            //    }
-                                            //    first = true;
-                                            //}
-                                            tickets.add(counter, person)
-                                            rvAdapter.notifyItemInserted(counter)
-                                            counter++
-                                        }
-                                        Log.d("timer", "json:$json")
-                                    }
-                                }
-                            } else if (eventType == XmlPullParser.END_TAG) {
-                            }
-                            eventType = parser.next()
-                        }
-                    } catch (e: Exception) {
-                        Log.d("timer", "Error in ParseXML()", e)
+
+        GlobalScope.launch {
+            withContext(Dispatchers.IO){
+                val json = URL(url).readText()
+                Log.d("jsondata", json)
+                val gson = Gson()
+                val megamillionsData = gson.fromJson(json, MegamillionsData::class.java)
+                for(ticket in megamillionsData){
+                    val person = WinningTicket()
+                    person.date = ticket.draw_date//jsonObject.getString("field_draw_date")
+                    person.winningNumber = ticket.winning_numbers + " " + ticket.mega_ball
+                    person.multiplier = ticket.multiplier
+                    tickets.add(counter, person)
+                    rv.post{
+                        rvAdapter.notifyItemInserted(counter)
                     }
+                    counter++
                 }
-        ) {
-            // handle error response
-        }
-        requestQueue.add(stringRequest)
-        rvAdapter.setOnLoadMoreListener (object : OnLoadMoreListener {
-            override fun onLoadMore() {
-                Log.d("timer", "loading more")
-                tickets.add(null)
-                rvAdapter.notifyItemInserted(tickets.size - 1)
-                now = past.clone() as Calendar
-                past.add(Calendar.MONTH, -1)
-                Log.d("timer", "dates:::::: " + now!!.time.toString() + "  :  " + past.getTime().toString())
-                val url = "https://www.megamillions.com/cmspages/utilservice.asmx/GetDrawingPagingData?pageNumber=1&pageSize=21&startDate=" + inputFormat.format(past.getTime()) + "&endDate=" + inputFormat.format(now!!.time)
-                val stringRequest = StringRequest(Request.Method.GET, url,
-                        { response ->
-                            try {
-                                tickets.removeAt(tickets.size - 1)
-                                rvAdapter.notifyItemRemoved(tickets.size)
-                                val factory = XmlPullParserFactory.newInstance()
-                                factory.isNamespaceAware = true
-                                val parser = factory.newPullParser()
-                                parser.setInput(StringReader(response))
-                                var eventType = parser.eventType
-                                while (eventType != XmlPullParser.END_DOCUMENT) {
-                                    if (eventType == XmlPullParser.START_TAG) {
-                                        val name = parser.name
-                                        if (name == "string") {
-                                            if (parser.next() == XmlPullParser.TEXT) {
-                                                val json = parser.text
-                                                val `object` = JSONObject(json)
-                                                val array = `object`.getJSONArray("DrawingData")
-                                                for (i in 0 until array.length()) {
-                                                    val jsonObject = array.getJSONObject(i)
-                                                    val person = WinningTicket()
-                                                    var ball1 = 0
-                                                    var ball2 = 0
-                                                    var ball3 = 0
-                                                    var ball4 = 0
-                                                    var ball5 = 0
-                                                    var ball6 = 0
-                                                    var mega: Int
-                                                    if (!jsonObject.isNull("PlayDate")) {
-                                                        person.date = jsonObject.getString("PlayDate")
-                                                    }
-                                                    if (!jsonObject.isNull("N1")) {
-                                                        ball1 = jsonObject.getInt("N1")
-                                                    }
-                                                    if (!jsonObject.isNull("N2")) {
-                                                        ball2 = jsonObject.getInt("N2")
-                                                    }
-                                                    if (!jsonObject.isNull("N3")) {
-                                                        ball3 = jsonObject.getInt("N3")
-                                                    }
-                                                    if (!jsonObject.isNull("N4")) {
-                                                        ball4 = jsonObject.getInt("N4")
-                                                    }
-                                                    if (!jsonObject.isNull("N5")) {
-                                                        ball5 = jsonObject.getInt("N5")
-                                                    }
-                                                    if (!jsonObject.isNull("MBall")) {
-                                                        ball6 = jsonObject.getInt("MBall")
-                                                    }
-                                                    if (!jsonObject.isNull("Megaplier")) {
-                                                        person.multiplier = jsonObject.getString("Megaplier")
-                                                    }
-                                                    person.winningNumber = "$ball1,$ball2,$ball3,$ball4,$ball5,$ball6"
-                                                    //if(!first){
-                                                    //    WinningTicket tick = SharedPrefHelper.getSharedOBJECT(getApplicationContext(),"ticket");
-                                                    //    if(tick == null || !tick.equals(person)){
-                                                    //        SharedPrefHelper.setSharedOBJECT(getApplicationContext(),"ticket",person);
-                                                    //    }
-                                                    //    first = true;
-                                                    //}
-                                                    if (!tickets.contains(person)) {
-                                                        tickets.add(counter, person)
-                                                        rvAdapter.notifyItemInserted(counter)
-                                                        counter++
-                                                    }
-                                                }
-                                                Log.d("timer", "json:$json")
-                                                rvAdapter.setLoaded()
-                                            }
-                                        }
-                                    } else if (eventType == XmlPullParser.END_TAG) {
-                                    }
-                                    eventType = parser.next()
-                                }
-                            } catch (e: Exception) {
-                                Log.d("timer", "Error in ParseXML()", e)
-                            }
-                        }
-                ) {
-                    // handle error response
-                }
-                requestQueue.add(stringRequest)
             }
         }
-
-        )
     }
 
     companion object {

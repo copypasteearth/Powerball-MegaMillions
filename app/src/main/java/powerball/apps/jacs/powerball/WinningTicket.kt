@@ -30,7 +30,7 @@ class WinningTicket : Serializable {
         // if(winningNumber.equals(ticket)){
         //     return "Jackpot!!!";
         // }
-        val win = winningNumber!!.split(",").toTypedArray()
+        val win = winningNumber!!.split(" ").toTypedArray()
         val yours = ticket.split(" ").toTypedArray()
         var powerballhit = false
         if (win[win.size - 1].toInt() == yours[yours.size - 1].toInt()) {

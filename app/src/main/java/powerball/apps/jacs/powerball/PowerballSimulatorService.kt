@@ -42,7 +42,7 @@ class PowerballSimulatorService : Service() {
             }
             val power = random.nextInt(26) + 1
             Collections.sort(nums)
-            val number = nums[0].toString() + "," + nums[1] + "," + nums[2] + "," + nums[3] + "," + nums[4] + "," + nums[5] + "," + power
+            val number = nums[0].toString() + " " + nums[1] + " " + nums[2] + " " + nums[3] + " " + nums[4] + " " + nums[5] + " " + power
 
             //Log.d("powerballnumber","number : " + number);
             val ticket = WinningTicket()
