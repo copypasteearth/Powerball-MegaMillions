@@ -58,9 +58,11 @@ class RVAdapter internal constructor(var tickets: List<WinningTicket?>?, recycle
             val ball6: TextView
             val win: TextView
             val date = TextView(holder.context)
+            date.textSize = 25f
             date.text = "Date: " + tickets!![holder1.getAdapterPosition()]!!.date
             val winning = TextView(holder.context)
             winning.text = "Winning Number"
+            winning.textSize = 25f
             if (type == Constants.POWERBALL) {
                 view = inflater.inflate(R.layout.balls, null)
                 ball1 = view.findViewById<View>(R.id.ball1) as TextView
@@ -99,6 +101,7 @@ class RVAdapter internal constructor(var tickets: List<WinningTicket?>?, recycle
             for (i in myPick.indices) {
                 val tick1 = myPick[i]
                 val ticknum = TextView(holder.context)
+                ticknum.textSize = 25f
                 ticknum.text = "Ticket " + (i + 1)
                 var view1: View
                 val inflater1 = holder.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater

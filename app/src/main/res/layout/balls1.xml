@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
     android:background="@color/black">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:id="@+id/linearlayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="H,7:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
         <RelativeLayout
             android:layout_width="0dip"
             android:layout_height="match_parent"
@@ -15,9 +21,10 @@
             <TextView
                 android:id="@+id/ball1m"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@drawable/ball1"
                 android:gravity="center"
+                android:textSize="25sp"
                 />
         </RelativeLayout>
         <RelativeLayout
@@ -27,8 +34,9 @@
             <TextView
                 android:id="@+id/ball2m"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@drawable/ball1"
+                android:textSize="25sp"
                 android:gravity="center"/>
         </RelativeLayout>
         <RelativeLayout
@@ -38,8 +46,9 @@
             <TextView
                 android:id="@+id/ball3m"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@drawable/ball1"
+                android:textSize="25sp"
                 android:gravity="center"/>
         </RelativeLayout>
         <RelativeLayout
@@ -49,8 +58,9 @@
             <TextView
                 android:id="@+id/ball4m"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@drawable/ball1"
+                android:textSize="25sp"
                 android:gravity="center"/>
         </RelativeLayout>
         <RelativeLayout
@@ -60,8 +70,9 @@
             <TextView
                 android:id="@+id/ball5m"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@drawable/ball1"
+                android:textSize="25sp"
                 android:gravity="center"/>
         </RelativeLayout>
         <RelativeLayout
@@ -71,8 +82,9 @@
             <TextView
                 android:id="@+id/ball6m"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@drawable/mega1"
+                android:textSize="25sp"
                 android:gravity="center"/>
         </RelativeLayout>
         <RelativeLayout
@@ -86,6 +98,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/add_ticket"
+                android:textSize="25sp"
                 android:textColor="@color/white" />
         </RelativeLayout>
     </LinearLayout>
@@ -96,6 +109,11 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@+id/linearlayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        android:textSize="25sp"
+        app:layout_constraintStart_toStartOf="parent"
         />
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>
