@@ -24,7 +24,7 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/ball1"
                 android:gravity="center"
-                android:textSize="25sp"
+                android:textSize="20sp"
                 />
         </RelativeLayout>
         <RelativeLayout
@@ -36,7 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/ball1"
-                android:textSize="25sp"
+                android:textSize="20sp"
                 android:gravity="center"/>
         </RelativeLayout>
         <RelativeLayout
@@ -48,7 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/ball1"
-                android:textSize="25sp"
+                android:textSize="20sp"
                 android:gravity="center"/>
         </RelativeLayout>
         <RelativeLayout
@@ -60,7 +60,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/ball1"
-                android:textSize="25sp"
+                android:textSize="20sp"
                 android:gravity="center"/>
         </RelativeLayout>
         <RelativeLayout
@@ -72,7 +72,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/ball1"
-                android:textSize="25sp"
+                android:textSize="20sp"
                 android:gravity="center"/>
         </RelativeLayout>
         <RelativeLayout
@@ -84,7 +84,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/mega1"
-                android:textSize="25sp"
+                android:textSize="20sp"
                 android:gravity="center"/>
         </RelativeLayout>
         <RelativeLayout
@@ -98,7 +98,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/add_ticket"
-                android:textSize="25sp"
+                android:textSize="20sp"
                 android:textColor="@color/white" />
         </RelativeLayout>
     </LinearLayout>
@@ -112,7 +112,7 @@
         app:layout_constraintTop_toBottomOf="@+id/linearlayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        android:textSize="25sp"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         />
 

@@ -18,7 +18,9 @@ object Constants {
     const val POWER_TICKETS = "powerball"
     const val MEGA_TICKETS = "megamillions"
     const val POWER_LONG_COUNTER = "powerlong"
+    const val MEGA_LONG_COUNTER = "megalong"
     const val MEGA_FOREGROUND = 10001
     const val POWER_FOREGROUND = 10000
     const val POWER_SIM_FOREGROUND = 10002
+    const val MEGA_SIM_FOREGROUND = 10003
 }

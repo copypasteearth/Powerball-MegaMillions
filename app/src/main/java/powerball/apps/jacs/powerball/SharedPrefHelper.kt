@@ -118,4 +118,15 @@ object SharedPrefHelper {
         val myPrefs = context.getSharedPreferences(context.packageName, Context.MODE_PRIVATE)
         return myPrefs.getLong(Constants.POWER_LONG_COUNTER, 0)
     }
+    fun setLongMegaCounter(context: Context, num: Long) {
+        val myPrefs = context.getSharedPreferences(context.packageName, Context.MODE_PRIVATE)
+        val prefsEditor = myPrefs.edit()
+        prefsEditor.putLong(Constants.MEGA_LONG_COUNTER, num)
+        prefsEditor.commit()
+    }
+
+    fun getLongMegaCounter(context: Context): Long {
+        val myPrefs = context.getSharedPreferences(context.packageName, Context.MODE_PRIVATE)
+        return myPrefs.getLong(Constants.MEGA_LONG_COUNTER, 0)
+    }
 }
