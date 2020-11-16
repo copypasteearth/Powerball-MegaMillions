@@ -168,6 +168,7 @@ class MegaBackgroundService : Service() {
                                                 log.setTextColor(images[j], Color.BLACK)
                                                 log.setTextViewText(images[j], split[j])
                                             } else {
+                                                log.setInt(images[j], "setBackgroundResource", R.drawable.mega1)
                                                 log.setTextColor(images[j], Color.BLACK)
                                                 log.setTextViewText(images[j], split[j])
                                             }
