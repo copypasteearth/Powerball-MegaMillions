@@ -180,7 +180,7 @@ class RVAdapter internal constructor(var tickets: List<WinningTicket?>?, recycle
                 }
 
                 //TextView end = (TextView) view1.findViewById(R.id.win);
-                end.text = tickets!![position]!!.calculateWin(tick)
+                end.text = tickets!![position]!!.calculateWin(tick, tick1.multi)
                 holder.linear.addView(ticknum)
                 holder.linear.addView(view1)
             }

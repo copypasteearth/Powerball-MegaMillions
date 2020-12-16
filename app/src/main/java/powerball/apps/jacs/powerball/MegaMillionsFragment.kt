@@ -94,21 +94,26 @@ class MegaMillionsFragment : Fragment() {
 
         GlobalScope.launch {
             withContext(Dispatchers.IO){
-                val json = URL(url).readText()
-                Log.d("jsondata", json)
-                val gson = Gson()
-                val megamillionsData = gson.fromJson(json, MegamillionsData::class.java)
-                for(ticket in megamillionsData){
-                    val person = WinningTicket()
-                    person.date = ticket.draw_date//jsonObject.getString("field_draw_date")
-                    person.winningNumber = ticket.winning_numbers + " " + ticket.mega_ball
-                    person.multiplier = ticket.multiplier
-                    tickets.add(counter, person)
-                    rv.post{
-                        rvAdapter.notifyItemInserted(counter)
+                try{
+                    val json = URL(url).readText()
+                    Log.d("jsondata", json)
+                    val gson = Gson()
+                    val megamillionsData = gson.fromJson(json, MegamillionsData::class.java)
+                    for(ticket in megamillionsData){
+                        val person = WinningTicket()
+                        person.date = ticket.draw_date//jsonObject.getString("field_draw_date")
+                        person.winningNumber = ticket.winning_numbers + " " + ticket.mega_ball
+                        person.multiplier = ticket.multiplier
+                        tickets.add(counter, person)
+                        rv.post{
+                            rvAdapter.notifyItemInserted(counter)
+                        }
+                        counter++
                     }
-                    counter++
+                }catch(e : Exception){
+                    Log.e("exception coroutine", "exception ${e.toString()}")
                 }
+
             }
         }
     }

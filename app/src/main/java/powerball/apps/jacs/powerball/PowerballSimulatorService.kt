@@ -52,7 +52,7 @@ class PowerballSimulatorService : Service() {
             for (i in data!!.indices) {
                 data!![i]!!.plays = counter - data!![i]!!.ofsetPlays
                 data!![i]!!.incrementCounter()
-                val winning = ticket.calculateWin(data!![i]!!.number!!)
+                val winning = ticket.calculateWin(data!![i]!!.number!!, false)
                 if (winning == "Nothing :(") {
                     continue
                 }

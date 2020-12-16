@@ -26,7 +26,7 @@ class WinningTicket : Serializable {
     var winningNumber: String? = null
     @JvmField
     var multiplier: String? = null
-    fun calculateWin(ticket: String): String {
+    fun calculateWin(ticket: String, multi: Boolean): String {
         // if(winningNumber.equals(ticket)){
         //     return "Jackpot!!!";
         // }
@@ -44,32 +44,33 @@ class WinningTicket : Serializable {
                 }
             }
         }
+
         if (count == 5 && powerballhit) {
             return "Jackpot!!!"
         }
         if (count == 5) {
-            return "1 Million winner!!"
+            return "1 Million winner!!" + (if (multi) "x2" else "")
         }
         if (count == 4 && powerballhit) {
-            return "50,000 hit!!!"
+            return "50,000 hit!!!"  + (if (multi) "x$multiplier" else "")
         }
         if (count == 4) {
-            return "$100 hit"
+            return "$100 hit" + (if (multi) "x$multiplier" else "")
         }
         if (count == 3 && powerballhit) {
-            return "$100 hit-"
+            return "$100 hit-" + (if (multi) "x$multiplier" else "")
         }
         if (count == 3) {
-            return "$7 hit"
+            return "$7 hit" + (if (multi) "x$multiplier" else "")
         }
         if (count == 2 && powerballhit) {
-            return "$7 hit-"
+            return "$7 hit-" + (if (multi) "x$multiplier" else "")
         }
         if (count == 1 && powerballhit) {
-            return "$4 hit"
+            return "$4 hit" + (if (multi) "x$multiplier" else "")
         }
         return if (powerballhit) {
-            "$4 hit-"
+            "$4 hit-" + (if (multi) "x$multiplier" else "")
         } else "Nothing :("
     }
 }

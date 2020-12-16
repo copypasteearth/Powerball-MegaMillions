@@ -88,22 +88,27 @@ class PowerballFragment : Fragment() {
 
         GlobalScope.launch {
             withContext(Dispatchers.IO){
-                val json = URL(url).readText()
-                Log.d("jsondata", json)
-                val gson = Gson()
-                val powerballData = gson.fromJson(json, PowerballData::class.java)
-                for(ticket in powerballData){
-                    val person = WinningTicket()
-                    person.date = ticket.draw_date//jsonObject.getString("field_draw_date")
-                    person.winningNumber = ticket.winning_numbers
-                    person.multiplier = ticket.multiplier
-                    tickets.add(counter, person)
-                    rv.post{
-                        rvAdapter.notifyItemInserted(counter)
-                    }
+                try{
+                    val json = URL(url).readText()
+                    Log.d("jsondata", json)
+                    val gson = Gson()
+                    val powerballData = gson.fromJson(json, PowerballData::class.java)
+                    for(ticket in powerballData){
+                        val person = WinningTicket()
+                        person.date = ticket.draw_date//jsonObject.getString("field_draw_date")
+                        person.winningNumber = ticket.winning_numbers
+                        person.multiplier = ticket.multiplier
+                        tickets.add(counter, person)
+                        rv.post{
+                            rvAdapter.notifyItemInserted(counter)
+                        }
 
-                    counter++
+                        counter++
+                    }
+                }catch(e : Exception){
+                    Log.e("exception coroutine", "exception ${e.toString()}")
                 }
+
             }
         }
 

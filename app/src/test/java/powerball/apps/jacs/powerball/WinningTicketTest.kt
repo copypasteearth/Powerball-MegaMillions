@@ -34,32 +34,32 @@ class WinningTicketTest {
     fun testCalculateWinMethod() {
         val ticket = WinningTicket()
         ticket.winningNumber = "1 2 3 4 5 6"
-        Assert.assertEquals("Jackpot!!!", ticket.calculateWin("1 2 3 4 5 6"))
-        Assert.assertEquals("1 Million winner!!", ticket.calculateWin("1 2 3 4 5 7"))
-        Assert.assertEquals("50,000 hit!!!", ticket.calculateWin("1 2 3 4 8 6"))
-        Assert.assertEquals("$100 hit", ticket.calculateWin("1 2 3 4 9 8"))
-        Assert.assertEquals("$100 hit-", ticket.calculateWin("1 2 3 9 8 6"))
-        Assert.assertEquals("$7 hit", ticket.calculateWin("1 2 3 12 13 14"))
-        Assert.assertEquals("$7 hit-", ticket.calculateWin("1 2 12 13 14 6"))
-        Assert.assertEquals("$4 hit", ticket.calculateWin("1 12 13 14 15 6"))
-        Assert.assertEquals("$4 hit-", ticket.calculateWin("11 12 13 14 15 6"))
-        Assert.assertEquals("Nothing :(", ticket.calculateWin("11 12 13 14 15 16"))
+        Assert.assertEquals("Jackpot!!!", ticket.calculateWin("1 2 3 4 5 6",false))
+        Assert.assertEquals("1 Million winner!!", ticket.calculateWin("1 2 3 4 5 7", false))
+        Assert.assertEquals("50,000 hit!!!", ticket.calculateWin("1 2 3 4 8 6", false))
+        Assert.assertEquals("$100 hit", ticket.calculateWin("1 2 3 4 9 8", false))
+        Assert.assertEquals("$100 hit-", ticket.calculateWin("1 2 3 9 8 6",false))
+        Assert.assertEquals("$7 hit", ticket.calculateWin("1 2 3 12 13 14",false))
+        Assert.assertEquals("$7 hit-", ticket.calculateWin("1 2 12 13 14 6",false))
+        Assert.assertEquals("$4 hit", ticket.calculateWin("1 12 13 14 15 6",false))
+        Assert.assertEquals("$4 hit-", ticket.calculateWin("11 12 13 14 15 6",false))
+        Assert.assertEquals("Nothing :(", ticket.calculateWin("11 12 13 14 15 16",false))
     }
 
     @Test
     fun testCalculateWinMethodWithLeadingZero() {
         val ticket = WinningTicket()
         ticket.winningNumber = "01 02 03 04 05 06"
-        Assert.assertEquals("Jackpot!!!", ticket.calculateWin("1 2 3 4 5 6"))
-        Assert.assertEquals("1 Million winner!!", ticket.calculateWin("1 2 3 4 5 7"))
-        Assert.assertEquals("50,000 hit!!!", ticket.calculateWin("1 2 3 4 8 6"))
-        Assert.assertEquals("$100 hit", ticket.calculateWin("1 2 3 4 9 8"))
-        Assert.assertEquals("$100 hit-", ticket.calculateWin("1 2 3 9 8 6"))
-        Assert.assertEquals("$7 hit", ticket.calculateWin("1 2 3 12 13 14"))
-        Assert.assertEquals("$7 hit-", ticket.calculateWin("1 2 12 13 14 6"))
-        Assert.assertEquals("$4 hit", ticket.calculateWin("1 12 13 14 15 6"))
-        Assert.assertEquals("$4 hit-", ticket.calculateWin("11 12 13 14 15 6"))
-        Assert.assertEquals("Nothing :(", ticket.calculateWin("11 12 13 14 15 16"))
+        Assert.assertEquals("Jackpot!!!", ticket.calculateWin("1 2 3 4 5 6",false))
+        Assert.assertEquals("1 Million winner!!", ticket.calculateWin("1 2 3 4 5 7",false))
+        Assert.assertEquals("50,000 hit!!!", ticket.calculateWin("1 2 3 4 8 6",false))
+        Assert.assertEquals("$100 hit", ticket.calculateWin("1 2 3 4 9 8",false))
+        Assert.assertEquals("$100 hit-", ticket.calculateWin("1 2 3 9 8 6",false))
+        Assert.assertEquals("$7 hit", ticket.calculateWin("1 2 3 12 13 14",false))
+        Assert.assertEquals("$7 hit-", ticket.calculateWin("1 2 12 13 14 6",false))
+        Assert.assertEquals("$4 hit", ticket.calculateWin("1 12 13 14 15 6",false))
+        Assert.assertEquals("$4 hit-", ticket.calculateWin("11 12 13 14 15 6",false))
+        Assert.assertEquals("Nothing :(", ticket.calculateWin("11 12 13 14 15 16",false))
     }
 
     @Test

@@ -48,6 +48,7 @@ internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManage
     val widgetText = context.getString(R.string.appwidget_text)
     // Construct the RemoteViews object
     val views = RemoteViews(context.packageName, R.layout.mega_millions_widget)
+    views.removeAllViews(R.id.widget_layout)
     GlobalScope.launch {
         withContext(Dispatchers.IO){
             val url = "https://data.ny.gov/resource/5xaw-6ayf.json"
@@ -90,7 +91,7 @@ internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManage
                         var num = ""
                         var win = ""
                         num = tick.ticket.toString()
-                        win = person.calculateWin(num)
+                        win = person.calculateWin(num, tick.multi)
 
                         //String num = person.ticket1;
                         val split = num.split(" ").toTypedArray()
