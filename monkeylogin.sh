@@ -29,11 +29,7 @@ while [[ -z ${LAUNCHER_READY} ]]; do
 done
 # install debug version on device
 ./gradlew installDebug
-# package name
-package="powerball.apps.jacs.powerball"
 
-#start application, make sure to change package name and launcher activity name
-adb shell am start -n ${package}/.MainActivity
 
 echo "Launcher is ready :-)"
 
@@ -41,4 +37,4 @@ echo "Launcher is ready :-)"
 
 
 
-adb shell monkey -p com.datechnologies.rapptrgithubactionsplayground --ignore-security-exceptions --ignore-native-crashes -v 25000
+adb shell monkey -p powerball.apps.jacs.powerball --ignore-security-exceptions --ignore-native-crashes -v 25000
