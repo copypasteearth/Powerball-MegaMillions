@@ -8,10 +8,10 @@ package powerball.apps.jacs.powerball
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -72,7 +72,7 @@ class PowerballFragment : Fragment() {
     fun setRecyclerView(mContext: Context?) {
         counter = 0
         tickets = ArrayList()
-        val rv = view!!.findViewById<View>(R.id.recycle) as RecyclerView
+        val rv = requireView().findViewById<View>(R.id.recycle) as RecyclerView
         rv.removeAllViews()
         rv.setHasFixedSize(true)
         rv.addItemDecoration(DividerItemDecoration(mContext, LinearLayoutManager.VERTICAL))

@@ -9,7 +9,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.support.v4.content.ContextCompat
+import androidx.core.content.ContextCompat
 import android.util.Log
 
 /**
@@ -19,8 +19,8 @@ import android.util.Log
  */
 class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        val requestCode = intent.extras.getInt("requestCode")
-        if (requestCode == Constants.WEDNESDAY_ALARM || requestCode == Constants.SATURDAY_ALARM) {
+        val requestCode = intent.extras?.getInt("requestCode")
+        if (requestCode == Constants.MONDAY_ALARM || requestCode == Constants.WEDNESDAY_ALARM || requestCode == Constants.SATURDAY_ALARM) {
             val background = Intent(context, BackgroundService::class.java)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 ContextCompat.startForegroundService(context, background)

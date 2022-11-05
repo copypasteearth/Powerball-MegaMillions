@@ -7,10 +7,10 @@ package powerball.apps.jacs.powerball
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AlertDialog
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -54,14 +54,14 @@ class PickPowerballTickets : Fragment() {
     }
 
     fun instantiateViews() {
-        val power1 = view!!.findViewById(R.id.include) as View
+        val power1 = requireView().findViewById(R.id.include) as View
         powerBall = power1.findViewById<View>(R.id.win) as TextView
-        power = view!!.findViewById<View>(R.id.powerRecycle) as RecyclerView
+        power = requireView().findViewById<View>(R.id.powerRecycle) as RecyclerView
     }
 
     val myTickets: Unit
         get() {
-            powerNumbers = SharedPrefHelper.getMyTickets(this.context!!, "powerball")
+            powerNumbers = SharedPrefHelper.getMyTickets(this.requireContext(), "powerball")
         }
 
     fun populateRecyclerViews() {
@@ -79,15 +79,15 @@ class PickPowerballTickets : Fragment() {
                 //powerAdapter.notifyItemRemoved(position);
                 //powerAdapter.notifyItemRangeChanged(position, powerNumbers.size());
                 powerAdapter!!.notifyDataSetChanged()
-                SharedPrefHelper.setMyTickets(this@PickPowerballTickets.context!!, powerNumbers, "powerball")
+                SharedPrefHelper.setMyTickets(this@PickPowerballTickets.requireContext(), powerNumbers, "powerball")
             }
         })
     }
 
     fun createPickDialog() {
-        val dialogBuilder = AlertDialog.Builder(activity!!)
+        val dialogBuilder = AlertDialog.Builder(requireActivity())
         // ...Irrelevant code for customizing the buttons and title
-        val inflater = activity!!.layoutInflater
+        val inflater = requireActivity().layoutInflater
         val dialogView = inflater.inflate(R.layout.ticket_selector, null)
         val one = dialogView.findViewById<View>(R.id.one) as NumberPicker
         one.minValue = 1
@@ -132,10 +132,10 @@ class PickPowerballTickets : Fragment() {
                 powerNumbers!!.add(ticket1)
                 Log.d("adapter", powerNumbers!!.size.toString() + "")
                 powerAdapter!!.notifyItemInserted(powerNumbers!!.size - 1)
-                SharedPrefHelper.setMyTickets(this.context!!, powerNumbers, "powerball")
+                SharedPrefHelper.setMyTickets(this.requireContext(), powerNumbers, "powerball")
                 alertDialog.dismiss()
             } else {
-                val tryagain = AlertDialog.Builder(activity!!)
+                val tryagain = AlertDialog.Builder(requireActivity())
                 tryagain.setMessage(resources.getString(R.string.alertticket))
                 val tryagaindialog = tryagain.create()
                 tryagaindialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes") { dialog, which -> createPickDialog() }

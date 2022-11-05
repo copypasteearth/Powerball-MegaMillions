@@ -16,8 +16,8 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Handler
 import android.os.IBinder
-import android.support.v4.app.NotificationCompat
-import android.support.v4.app.NotificationManagerCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import android.util.Log
 import android.widget.RemoteViews
 import com.android.volley.RequestQueue
@@ -225,6 +225,7 @@ class BackgroundService : Service() {
                                     val notificationManager = NotificationManagerCompat.from(context)
 
                                     // notificationId is a unique int for each notification that you must define
+
                                     notificationManager.notify(Random().nextInt(), mBuilder.build())
                                     stopSelf()
                                     break

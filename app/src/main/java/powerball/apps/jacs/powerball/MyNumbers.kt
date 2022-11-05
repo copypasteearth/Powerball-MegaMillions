@@ -3,10 +3,10 @@ package powerball.apps.jacs.powerball
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AlertDialog
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -53,23 +53,23 @@ class MyNumbers : Fragment() {
     }
 
     fun instantiateViews() {
-        val power1 = view!!.findViewById(R.id.include) as View
-        val mega1 = view!!.findViewById(R.id.include1) as View
+        val power1 = requireView().findViewById(R.id.include) as View
+        val mega1 = requireView().findViewById(R.id.include1) as View
         powerBall = power1.findViewById<View>(R.id.win) as TextView
         megaMillions = mega1.findViewById<View>(R.id.winm) as TextView
-        power = view!!.findViewById<View>(R.id.powerRecycle) as RecyclerView
-        mega = view!!.findViewById<View>(R.id.megaRecycle) as RecyclerView
+        power = requireView().findViewById<View>(R.id.powerRecycle) as RecyclerView
+        mega = requireView().findViewById<View>(R.id.megaRecycle) as RecyclerView
     }
 
     val myTickets: Unit
         get() {
-            powerNumbers = SharedPrefHelper.getMyTickets(this.context!!, "powerball")
-            megaNumbers = SharedPrefHelper.getMyTickets(this.context!!, "megamillions")
+            powerNumbers = SharedPrefHelper.getMyTickets(this.requireContext(), "powerball")
+            megaNumbers = SharedPrefHelper.getMyTickets(this.requireContext(), "megamillions")
         }
 
     fun setMyTickets() {
-        SharedPrefHelper.setMyTickets(this.context!!, powerNumbers, "powerball")
-        SharedPrefHelper.setMyTickets(this.context!!, megaNumbers, "megamillions")
+        SharedPrefHelper.setMyTickets(this.requireContext(), powerNumbers, "powerball")
+        SharedPrefHelper.setMyTickets(this.requireContext(), megaNumbers, "megamillions")
     }
 
     fun populateRecyclerViews() {
@@ -87,7 +87,7 @@ class MyNumbers : Fragment() {
                 //powerAdapter.notifyItemRemoved(position);
                 //powerAdapter.notifyItemRangeChanged(position, powerNumbers.size());
                 powerAdapter!!.notifyDataSetChanged()
-                SharedPrefHelper.setMyTickets(this@MyNumbers.context!!, powerNumbers, "powerball")
+                SharedPrefHelper.setMyTickets(this@MyNumbers.requireContext(), powerNumbers, "powerball")
             }
 
         }
@@ -103,7 +103,7 @@ class MyNumbers : Fragment() {
                 megaNumbers!!.removeAt(position)
                 mega!!.removeAllViews()
                 megaAdapter!!.notifyDataSetChanged()
-                SharedPrefHelper.setMyTickets(this@MyNumbers.context!!, megaNumbers, "megamillions")
+                SharedPrefHelper.setMyTickets(this@MyNumbers.requireContext(), megaNumbers, "megamillions")
             }
 
         }
@@ -118,9 +118,9 @@ class MyNumbers : Fragment() {
 
     fun setClickListeners() {
         powerBall!!.setOnClickListener {
-            val dialogBuilder = AlertDialog.Builder(activity!!)
+            val dialogBuilder = AlertDialog.Builder(requireActivity())
             // ...Irrelevant code for customizing the buttons and title
-            val inflater = activity!!.layoutInflater
+            val inflater = requireActivity().layoutInflater
             val dialogView = inflater.inflate(R.layout.ticket_selector, null)
             val one = dialogView.findViewById<View>(R.id.one) as NumberPicker
             one.minValue = 1
@@ -161,15 +161,15 @@ class MyNumbers : Fragment() {
                 powerNumbers!!.add(ticket1)
                 Log.d("adapter", powerNumbers!!.size.toString() + "")
                 powerAdapter!!.notifyItemInserted(powerNumbers!!.size - 1)
-                SharedPrefHelper.setMyTickets(this.context!!, powerNumbers, "powerball")
+                SharedPrefHelper.setMyTickets(this.requireContext(), powerNumbers, "powerball")
                 alertDialog.dismiss()
             }
             alertDialog.show()
         }
         megaMillions!!.setOnClickListener {
-            val dialogBuilder = AlertDialog.Builder(activity!!)
+            val dialogBuilder = AlertDialog.Builder(requireActivity())
             // ...Irrelevant code for customizing the buttons and title
-            val inflater = activity!!.layoutInflater
+            val inflater = requireActivity().layoutInflater
             val dialogView = inflater.inflate(R.layout.ticket_selector, null)
             val one = dialogView.findViewById<View>(R.id.one) as NumberPicker
             one.minValue = 1
@@ -212,7 +212,7 @@ class MyNumbers : Fragment() {
                 megaNumbers!!.add(ticket1)
                 megaAdapter!!.notifyItemInserted(megaNumbers!!.size - 1)
                 //megaAdapter.notifyDataSetChanged();
-                SharedPrefHelper.setMyTickets(this.context!!, megaNumbers, "megamillions")
+                SharedPrefHelper.setMyTickets(this.requireContext(), megaNumbers, "megamillions")
                 alertDialog.dismiss()
             }
             alertDialog.show()

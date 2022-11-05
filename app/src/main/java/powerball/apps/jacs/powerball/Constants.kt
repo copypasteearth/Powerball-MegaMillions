@@ -6,6 +6,7 @@
 package powerball.apps.jacs.powerball
 
 object Constants {
+    const val MONDAY_ALARM = 99
     const val WEDNESDAY_ALARM = 100
     const val SATURDAY_ALARM = 101
     const val TUESDAY_ALARM = 102

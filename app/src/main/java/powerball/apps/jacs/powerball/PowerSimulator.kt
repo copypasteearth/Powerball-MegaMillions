@@ -13,7 +13,7 @@ import android.content.ServiceConnection
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -56,7 +56,7 @@ class PowerSimulator : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if (binding) mContext!!.unbindService(mPlayServiceConnection)
+        if (binding) mContext!!.unbindService(mPlayServiceConnection!!)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -168,7 +168,7 @@ class PowerSimulator : Fragment() {
 
                 override fun stopLottoService() {
                     val intent = Intent(mContext, PowerballSimulatorService::class.java)
-                    mContext!!.unbindService(mPlayServiceConnection)
+                    mContext!!.unbindService(mPlayServiceConnection!!)
                     binding = false
                     mContext!!.stopService(intent)
                     start!!.setText(R.string.start)
@@ -190,7 +190,7 @@ class PowerSimulator : Fragment() {
             start!!.setOnClickListener {
                 if (PowerballSimulatorService.running) {
                     val intent = Intent(mContext, PowerballSimulatorService::class.java)
-                    mContext!!.unbindService(mPlayServiceConnection)
+                    mContext!!.unbindService(mPlayServiceConnection!!)
                     binding = false
                     mContext!!.stopService(intent)
                     start!!.setText(R.string.start)
@@ -201,14 +201,14 @@ class PowerSimulator : Fragment() {
                     } else {
                         mContext!!.startService(intent)
                     }
-                    mContext!!.bindService(intent, mPlayServiceConnection, Context.BIND_AUTO_CREATE)
+                    mContext!!.bindService(intent, mPlayServiceConnection!!, Context.BIND_AUTO_CREATE)
                     binding = true
                     start!!.setText(R.string.stop)
                 }
             }
             if (PowerballSimulatorService.running) {
                 val intent = Intent(mContext, PowerballSimulatorService::class.java)
-                mContext!!.bindService(intent, mPlayServiceConnection, Context.BIND_AUTO_CREATE)
+                mContext!!.bindService(intent, mPlayServiceConnection!!, Context.BIND_AUTO_CREATE)
                 binding = true
             }
         } else {

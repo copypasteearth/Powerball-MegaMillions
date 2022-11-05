@@ -13,6 +13,33 @@ import android.util.Log
 import java.util.*
 
 object AlarmSettingManager {
+
+    fun setMondayPowerballAlarm(context: Context) {
+        val alarm = Intent("powerball.apps.jacs.powerball.START_ALARM")
+        alarm.putExtra("requestCode", Constants.MONDAY_ALARM)
+        alarm.setClass(context, AlarmReceiver::class.java)
+        val alarmRunning = PendingIntent.getBroadcast(context, Constants.MONDAY_ALARM, alarm, PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_MUTABLE) != null
+        if (!alarmRunning) {
+            val now = Calendar.getInstance()
+            val calSet = Calendar.getInstance()
+            //wednesday
+            calSet[Calendar.DAY_OF_WEEK] = Calendar.TUESDAY
+            calSet[Calendar.HOUR_OF_DAY] = 7
+            calSet[Calendar.MINUTE] = 15
+            calSet[Calendar.SECOND] = 0
+            calSet[Calendar.MILLISECOND] = 0
+            if (!calSet.after(now)) {
+                calSet.add(Calendar.WEEK_OF_YEAR, 1)
+                Log.d("timer", "setting later date: " + calSet.time.toString())
+            } else {
+                Log.d("timer", "date is good: " + calSet.time.toString())
+            }
+            Log.d("timer", Date(calSet.timeInMillis).toString())
+            val pendingIntent = PendingIntent.getBroadcast(context, Constants.MONDAY_ALARM, alarm, PendingIntent.FLAG_MUTABLE)
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calSet.timeInMillis, Constants.ONE_WEEK, pendingIntent)
+        }
+    }
     /**
      *
      * @param context
@@ -24,13 +51,13 @@ object AlarmSettingManager {
         val alarm = Intent("powerball.apps.jacs.powerball.START_ALARM")
         alarm.putExtra("requestCode", Constants.TUESDAY_ALARM)
         alarm.setClass(context, AlarmReceiver::class.java)
-        val alarmRunning = PendingIntent.getBroadcast(context, Constants.TUESDAY_ALARM, alarm, PendingIntent.FLAG_NO_CREATE) != null
+        val alarmRunning = PendingIntent.getBroadcast(context, Constants.TUESDAY_ALARM, alarm, PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_MUTABLE) != null
         if (!alarmRunning) {
             val now = Calendar.getInstance()
             val calSet = Calendar.getInstance()
             //wednesday
-            calSet[Calendar.DAY_OF_WEEK] = Calendar.TUESDAY
-            calSet[Calendar.HOUR_OF_DAY] = 23
+            calSet[Calendar.DAY_OF_WEEK] = Calendar.WEDNESDAY
+            calSet[Calendar.HOUR_OF_DAY] = 7
             calSet[Calendar.MINUTE] = 15
             calSet[Calendar.SECOND] = 0
             calSet[Calendar.MILLISECOND] = 0
@@ -41,7 +68,7 @@ object AlarmSettingManager {
                 Log.d("timer", "date is good: " + calSet.time.toString())
             }
             Log.d("timer", Date(calSet.timeInMillis).toString())
-            val pendingIntent = PendingIntent.getBroadcast(context, Constants.TUESDAY_ALARM, alarm, 0)
+            val pendingIntent = PendingIntent.getBroadcast(context, Constants.TUESDAY_ALARM, alarm, PendingIntent.FLAG_MUTABLE)
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calSet.timeInMillis, Constants.ONE_WEEK, pendingIntent)
         }
@@ -55,7 +82,7 @@ object AlarmSettingManager {
     fun cancelTuesdayMegaMillionsAlarm(context: Context) {
         val alarm = Intent("powerball.apps.jacs.powerball.START_ALARM")
         alarm.setClass(context, AlarmReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(context, Constants.TUESDAY_ALARM, alarm, 0)
+        val pendingIntent = PendingIntent.getBroadcast(context, Constants.TUESDAY_ALARM, alarm, PendingIntent.FLAG_MUTABLE)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmManager.cancel(pendingIntent)
     }
@@ -71,13 +98,13 @@ object AlarmSettingManager {
         val alarm = Intent("powerball.apps.jacs.powerball.START_ALARM")
         alarm.putExtra("requestCode", Constants.WEDNESDAY_ALARM)
         alarm.setClass(context, AlarmReceiver::class.java)
-        val alarmRunning = PendingIntent.getBroadcast(context, Constants.WEDNESDAY_ALARM, alarm, PendingIntent.FLAG_NO_CREATE) != null
+        val alarmRunning = PendingIntent.getBroadcast(context, Constants.WEDNESDAY_ALARM, alarm, PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_MUTABLE) != null
         if (!alarmRunning) {
             val now = Calendar.getInstance()
             val calSet = Calendar.getInstance()
             //wednesday
-            calSet[Calendar.DAY_OF_WEEK] = Calendar.WEDNESDAY
-            calSet[Calendar.HOUR_OF_DAY] = 23
+            calSet[Calendar.DAY_OF_WEEK] = Calendar.THURSDAY
+            calSet[Calendar.HOUR_OF_DAY] = 7
             calSet[Calendar.MINUTE] = 15
             calSet[Calendar.SECOND] = 0
             calSet[Calendar.MILLISECOND] = 0
@@ -88,7 +115,7 @@ object AlarmSettingManager {
                 Log.d("timer", "date is good: " + calSet.time.toString())
             }
             Log.d("timer", Date(calSet.timeInMillis).toString())
-            val pendingIntent = PendingIntent.getBroadcast(context, Constants.WEDNESDAY_ALARM, alarm, 0)
+            val pendingIntent = PendingIntent.getBroadcast(context, Constants.WEDNESDAY_ALARM, alarm, PendingIntent.FLAG_MUTABLE)
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calSet.timeInMillis, Constants.ONE_WEEK, pendingIntent)
         }
@@ -102,7 +129,7 @@ object AlarmSettingManager {
     fun cancelWednesdayPowerballAlarm(context: Context) {
         val alarm = Intent("powerball.apps.jacs.powerball.START_ALARM")
         alarm.setClass(context, AlarmReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(context, Constants.WEDNESDAY_ALARM, alarm, 0)
+        val pendingIntent = PendingIntent.getBroadcast(context, Constants.WEDNESDAY_ALARM, alarm, PendingIntent.FLAG_MUTABLE)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmManager.cancel(pendingIntent)
     }
@@ -118,13 +145,13 @@ object AlarmSettingManager {
         val alarm = Intent("powerball.apps.jacs.powerball.START_ALARM")
         alarm.putExtra("requestCode", Constants.FRIDAY_ALARM)
         alarm.setClass(context, AlarmReceiver::class.java)
-        val alarmRunning = PendingIntent.getBroadcast(context, Constants.FRIDAY_ALARM, alarm, PendingIntent.FLAG_NO_CREATE) != null
+        val alarmRunning = PendingIntent.getBroadcast(context, Constants.FRIDAY_ALARM, alarm, PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_MUTABLE) != null
         if (!alarmRunning) {
             val now = Calendar.getInstance()
             val calSet1 = Calendar.getInstance()
             //Saturday
-            calSet1[Calendar.DAY_OF_WEEK] = Calendar.FRIDAY
-            calSet1[Calendar.HOUR_OF_DAY] = 23
+            calSet1[Calendar.DAY_OF_WEEK] = Calendar.SATURDAY
+            calSet1[Calendar.HOUR_OF_DAY] = 7
             calSet1[Calendar.MINUTE] = 15
             calSet1[Calendar.SECOND] = 0
             calSet1[Calendar.MILLISECOND] = 0
@@ -135,7 +162,7 @@ object AlarmSettingManager {
                 Log.d("timer", "date is good: " + calSet1.time.toString())
             }
             Log.d("timer", Date(calSet1.timeInMillis).toString())
-            val pendingIntent1 = PendingIntent.getBroadcast(context, Constants.FRIDAY_ALARM, alarm, 0)
+            val pendingIntent1 = PendingIntent.getBroadcast(context, Constants.FRIDAY_ALARM, alarm, PendingIntent.FLAG_MUTABLE)
             val alarmManager1 = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             alarmManager1.setRepeating(AlarmManager.RTC_WAKEUP, calSet1.timeInMillis, Constants.ONE_WEEK, pendingIntent1)
         }
@@ -149,7 +176,7 @@ object AlarmSettingManager {
     fun cancelFridayMegaMillionsAlarm(context: Context) {
         val alarm = Intent("powerball.apps.jacs.powerball.START_ALARM")
         alarm.setClass(context, AlarmReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(context, Constants.FRIDAY_ALARM, alarm, 0)
+        val pendingIntent = PendingIntent.getBroadcast(context, Constants.FRIDAY_ALARM, alarm, PendingIntent.FLAG_MUTABLE)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmManager.cancel(pendingIntent)
     }
@@ -165,13 +192,13 @@ object AlarmSettingManager {
         val alarm = Intent("powerball.apps.jacs.powerball.START_ALARM")
         alarm.putExtra("requestCode", Constants.SATURDAY_ALARM)
         alarm.setClass(context, AlarmReceiver::class.java)
-        val alarmRunning = PendingIntent.getBroadcast(context, Constants.SATURDAY_ALARM, alarm, PendingIntent.FLAG_NO_CREATE) != null
+        val alarmRunning = PendingIntent.getBroadcast(context, Constants.SATURDAY_ALARM, alarm, PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_MUTABLE) != null
         if (!alarmRunning) {
             val now = Calendar.getInstance()
             val calSet1 = Calendar.getInstance()
             //Saturday
-            calSet1[Calendar.DAY_OF_WEEK] = Calendar.SATURDAY
-            calSet1[Calendar.HOUR_OF_DAY] = 23
+            calSet1[Calendar.DAY_OF_WEEK] = Calendar.SUNDAY
+            calSet1[Calendar.HOUR_OF_DAY] = 7
             calSet1[Calendar.MINUTE] = 15
             calSet1[Calendar.SECOND] = 0
             calSet1[Calendar.MILLISECOND] = 0
@@ -182,7 +209,7 @@ object AlarmSettingManager {
                 Log.d("timer", "date is good: " + calSet1.time.toString())
             }
             Log.d("timer", Date(calSet1.timeInMillis).toString())
-            val pendingIntent1 = PendingIntent.getBroadcast(context, Constants.SATURDAY_ALARM, alarm, 0)
+            val pendingIntent1 = PendingIntent.getBroadcast(context, Constants.SATURDAY_ALARM, alarm, PendingIntent.FLAG_MUTABLE)
             val alarmManager1 = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             alarmManager1.setRepeating(AlarmManager.RTC_WAKEUP, calSet1.timeInMillis, Constants.ONE_WEEK, pendingIntent1)
         }
@@ -196,7 +223,7 @@ object AlarmSettingManager {
     fun cancelSaturdayPowerballAlarm(context: Context) {
         val alarm = Intent("powerball.apps.jacs.powerball.START_ALARM")
         alarm.setClass(context, AlarmReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(context, Constants.SATURDAY_ALARM, alarm, 0)
+        val pendingIntent = PendingIntent.getBroadcast(context, Constants.SATURDAY_ALARM, alarm, PendingIntent.FLAG_MUTABLE)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmManager.cancel(pendingIntent)
     }

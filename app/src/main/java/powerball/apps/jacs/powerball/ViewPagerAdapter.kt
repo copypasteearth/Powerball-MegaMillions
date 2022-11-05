@@ -5,12 +5,12 @@
  */
 package powerball.apps.jacs.powerball
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
 import java.util.*
 
-class ViewPagerAdapter(manager: FragmentManager?) : FragmentPagerAdapter(manager) {
+class ViewPagerAdapter(manager: FragmentManager) : FragmentPagerAdapter(manager) {
     private val mFragmentList: MutableList<Fragment> = ArrayList()
     private val mFragmentTitleList: MutableList<String> = ArrayList()
     override fun getItem(position: Int): Fragment {
